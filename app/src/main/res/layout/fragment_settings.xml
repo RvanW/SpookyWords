@@ -1,0 +1,35 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.vanw.robbert.spookywords.SettingsFragment"
+    android:background="#775f43"
+    android:clickable="true"
+    android:orientation="vertical">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:text="Settings"
+        android:layout_gravity="center_horizontal"
+        android:textSize="20dp"
+        android:id="@+id/settings_title"
+        android:layout_margin="10dp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New game"
+        android:id="@+id/button"
+        android:layout_gravity="center_horizontal"
+        android:nestedScrollingEnabled="false"
+        android:onClick="onReset" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Change language"
+        android:id="@+id/button2"
+        android:layout_gravity="center_horizontal"
+        android:onClick="onChangeLanguage" />
+
+</LinearLayout>

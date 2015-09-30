@@ -1,15 +1,16 @@
 package com.vanw.robbert.spookywords;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Created by Robbert on 28-9-2015.
  */
-public class Game {
+public class Game implements Serializable {
     Lexicon lexicon;
     boolean turn = true;
     boolean winner;
-    String guessedLetters = "";
+    public String guessedLetters = "";
 
     Game() {
         // empty constructor..
@@ -21,7 +22,7 @@ public class Game {
         guessedLetters += letter;
         lexicon.filter(guessedLetters);
 
-        if(!ended()) turn = !turn; // I don't want to switch turns if the game ended with this guess.
+        if(!ended()) turn = !turn; // I don't want to switch turns if the game ends with this guess.
     }
     public boolean turn(){
         return turn;
