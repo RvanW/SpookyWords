@@ -1,4 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="apptheme_color">#33b5e5</color>
+    <color name="apptheme_color">#FF6500</color>
+    <color name="yellow_light">#F1EB00</color>
+    <color name="yellow_dark">#ECEC56</color>
+    <color name="orange_light">#ffaf5c</color>
+    <color name="orange_base">#FF6500</color>444444
+    <color name="orange_dark">#7F3300</color>444444
+    <color name="green_dark">#358B00</color>
+    <color name="green_light">#4ABE02</color>
+    <color name="blue_light">#6349F2</color>
+    <color name="blue_dark">#0016BE</color>
+    <color name="grey_light">#E8E8E8</color>
+    <color name="grey">#717171</color>
+    <color name="grey_dark">#444444</color>444444
 </resources>

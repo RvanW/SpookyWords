@@ -2,34 +2,69 @@
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.vanw.robbert.spookywords.SettingsFragment"
-    android:background="#775f43"
+    android:background="@drawable/border_radius"
     android:clickable="true"
     android:orientation="vertical">
 
     <!-- TODO: Update blank fragment layout -->
 
-    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-        android:text="Settings"
-        android:layout_gravity="center_horizontal"
-        android:textSize="20dp"
-        android:id="@+id/settings_title"
-        android:layout_margin="10dp" />
-
-    <Button
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="New game"
-        android:id="@+id/button"
-        android:layout_gravity="center_horizontal"
-        android:nestedScrollingEnabled="false"
-        android:onClick="onReset" />
+        android:gravity="center_horizontal">
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Change language"
-        android:id="@+id/button2"
-        android:layout_gravity="center_horizontal"
-        android:onClick="onChangeLanguage" />
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:text="Settings"
+            android:textSize="25dp"
+            android:id="@+id/settings_title"
+            android:layout_margin="10dp"
+            android:textStyle="bold"
+            android:textColor="@color/grey_dark" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:weightSum="5">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:layout_marginTop="50dp"
+            android:onClick="newGame">
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="New game"
+                android:id="@+id/button"
+                android:layout_gravity="center_horizontal"
+                android:nestedScrollingEnabled="false"
+                android:onClick="newGame"
+                android:background="@drawable/custom_button" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center_vertical">
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Change language"
+                android:id="@+id/button2"
+                android:layout_gravity="center_horizontal"
+                android:onClick="onChangeLanguage"
+                android:background="@drawable/custom_button" />
+        </LinearLayout>
+    </LinearLayout>
 
 </LinearLayout>

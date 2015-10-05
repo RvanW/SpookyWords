@@ -3,7 +3,7 @@
 <!-- Generated with http://android-holo-colors.com -->
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
-  <style name="AppTheme" parent="Theme.AppCompat">
+  <style name="AppTheme" parent="@style/_AppTheme">
 
     <item name="android:textSelectHandleLeft">@drawable/apptheme_text_select_handle_left</item>
     <item name="android:textSelectHandleRight">@drawable/apptheme_text_select_handle_right</item>

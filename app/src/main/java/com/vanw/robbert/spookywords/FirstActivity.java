@@ -1,23 +1,24 @@
 package com.vanw.robbert.spookywords;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
-public class SettingsActivity extends AppCompatActivity {
+public class FirstActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_settings);
+        setContentView(R.layout.activity_first);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_settings, menu);
+        getMenuInflater().inflate(R.menu.menu_first, menu);
         return true;
     }
 
@@ -32,11 +33,19 @@ public class SettingsActivity extends AppCompatActivity {
         if (id == R.id.action_settings) {
             return true;
         }
-        else if (id == android.R.id.home) {
-            finish();
-            Log.v("HOME"," called");
-        }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void newGame(View view) {
+        Intent i = new Intent(this, SelectPlayersActivity.class);
+        startActivity(i);
+    }
+    public void highScores(View view) {
+        //TODO get list of highscores from player objects
+    }
+
+    public void openSettings(View view) {
+        //TODO open settings
     }
 }

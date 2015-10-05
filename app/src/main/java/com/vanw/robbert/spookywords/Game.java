@@ -11,6 +11,8 @@ public class Game implements Serializable {
     boolean turn = true;
     boolean winner;
     public String guessedLetters = "";
+    String p1;
+    String p2;
 
     Game() {
         // empty constructor..
@@ -39,10 +41,14 @@ public class Game implements Serializable {
         return winner;
     }
 
-    public String getPlayerName(boolean turn) {
+    public String getPlayerName(boolean turn) { // some fake player name retrieval..
         if(turn) {
-            return "Player 1";
+            return p1;
         }
-        return "Player 2";
+        return p2;
+    }
+    public void setPlayerNames(String p1, String p2) {
+        this.p1 = p1;
+        this.p2 = p2;
     }
 }

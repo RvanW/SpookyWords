@@ -68,6 +68,11 @@ public class Lexicon implements Serializable {
             if(!word.startsWith(filterValue)) {
                 setIterator.remove();
             }
+            else if(word.length() > 3 && word.equals(filterValue)) {
+                filterLexicon = new HashSet<>();
+                filterLexicon.add(word);
+                break;
+            }
         }
         if(count() == 1) {
             lastWord = result();

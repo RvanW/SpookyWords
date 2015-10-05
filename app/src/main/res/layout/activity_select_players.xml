@@ -1,0 +1,100 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context="com.vanw.robbert.spookywords.SelectPlayersActivity"
+    android:background="@drawable/background_gradient_grey"
+    android:orientation="vertical"
+    android:weightSum="3">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:baselineAligned="false"
+        android:weightSum="2"
+        android:layout_weight="1">
+
+        <TextView android:text="Player 1" android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:id="@+id/p1"
+            android:textSize="25sp"
+            android:layout_gravity="center_horizontal" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Hello.. Who are you?"
+            android:id="@+id/message"
+            android:layout_gravity="center_horizontal"
+            android:textIsSelectable="false"
+            android:textSize="18dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp" />
+
+        <Spinner
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/spinner"
+            android:spinnerMode="dropdown"
+            android:dropDownVerticalOffset="60dp"
+            android:background="@drawable/apptheme_spinner_background_holo_light"
+            android:padding="10dp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:gravity="center_vertical|center_horizontal"
+        android:layout_weight="1">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Or haven&apos;t we met yet?"
+            android:id="@+id/textView2" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="New Player"
+            android:id="@+id/button4"
+            android:background="@drawable/custom_button"
+            android:onClick="addPlayer"
+            android:textStyle="bold"
+            android:textColor="@color/grey_light" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center_vertical">
+
+        <Button
+            android:text="Language: English"
+            android:id="@+id/language"
+            style="@style/custom_button"
+            android:background="@drawable/custom_button_grey"
+            android:textColor="#ffffff"
+            android:onClick="switchLanguage" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Go!"
+            android:id="@+id/button7"
+            android:layout_gravity="center"
+            style="@style/custom_button"
+            android:layout_marginTop="15dp"
+            android:onClick="goButton" />
+    </LinearLayout>
+
+</LinearLayout>
