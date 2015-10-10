@@ -53,29 +53,35 @@ public class Lexicon implements Serializable {
                 }
             }
         }
-        filterLexicon = new HashSet<>(baseLexicon);
-
     }
-    Lexicon(ArrayList<String> testWords) {
+    Lexicon(HashSet<String> testWords) {
         baseLexicon = new HashSet<>(testWords);
-        filterLexicon = new HashSet<>(testWords);
 
     }
     public void filter(String filterValue) {
-        Iterator setIterator = filterLexicon.iterator();
-        while(setIterator.hasNext()) {
-            String word = (String) setIterator.next();
-            if(!word.startsWith(filterValue)) {
-                setIterator.remove();
-            }
-            else if(word.length() > 3 && word.equals(filterValue)) {
-                filterLexicon = new HashSet<>();
-                filterLexicon.add(word);
-                break;
+        if (filterLexicon == null) { // create a filtered lexicon if none.. might increase performance instead of remove words
+            filterLexicon = new HashSet<>();
+            for (String word : baseLexicon) {
+                if (word.startsWith(filterValue)) { // add words that start with value
+                    filterLexicon.add(word);
+                }
             }
         }
-        if(count() == 1) {
-            lastWord = result();
+        else {
+            Iterator setIterator = filterLexicon.iterator();
+            while (setIterator.hasNext()) {
+                String word = (String) setIterator.next();
+                if (!word.startsWith(filterValue)) { // delete words that do not start with value
+                    setIterator.remove();
+                } else if (word.length() > 3 && word.equals(filterValue)) { // if word longer than 3 chars match filtervalue.. game over
+                    filterLexicon = new HashSet<>();
+                    filterLexicon.add(word);
+                    break;
+                }
+            }
+            if (count() == 1) {
+                lastWord = result();
+            }
         }
     }
 
@@ -84,11 +90,13 @@ public class Lexicon implements Serializable {
     }
 
     public int count(){
+        if(filterLexicon == null) return -1;
         return filterLexicon.size();
     }
 
     public void reset() {
         filterLexicon = new HashSet<>(baseLexicon);
+        lastWord = null;
     }
 }
 

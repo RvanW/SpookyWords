@@ -15,8 +15,8 @@
         android:gravity="center_horizontal">
 
         <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-            android:text="Settings"
-            android:textSize="25dp"
+            android:text="@string/settings"
+            android:textSize="25sp"
             android:id="@+id/settings_title"
             android:layout_margin="10dp"
             android:textStyle="bold"
@@ -41,8 +41,8 @@
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="New game"
-                android:id="@+id/button"
+                android:text="@string/new_game"
+                android:id="@+id/newGame_settings"
                 android:layout_gravity="center_horizontal"
                 android:nestedScrollingEnabled="false"
                 android:onClick="newGame"
@@ -59,7 +59,7 @@
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Change language"
+                android:text="@string/change_language"
                 android:id="@+id/button2"
                 android:layout_gravity="center_horizontal"
                 android:onClick="onChangeLanguage"

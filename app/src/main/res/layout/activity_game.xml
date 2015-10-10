@@ -22,24 +22,54 @@
             android:layout_marginTop="80dp"
             android:layout_gravity="center_horizontal"
             android:gravity="center_horizontal" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Message"
+            android:id="@+id/message"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center_horizontal" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/rematch"
+            android:id="@+id/rematch"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/custom_button"
+            android:onClick="newGame"
+            android:visibility="gone" />
     </LinearLayout>
 
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:weightSum="2">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Player 1"
-            android:id="@+id/turn"
+            android:id="@+id/p1tv"
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:textSize="30dp"
             android:layout_weight="1"
             android:layout_gravity="center_vertical" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Player2"
+            android:id="@+id/p2tv"
+            android:layout_weight="1"
+            android:layout_gravity="center_vertical"
+            android:gravity="end"
+            android:textSize="30sp" />
 
     </LinearLayout>
 
@@ -61,12 +91,10 @@
             android:layout_centerHorizontal="true">
 
             <EditText
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/editText1"
                 android:inputType="text"
-                android:layout_centerVertical="true"
-                android:layout_centerHorizontal="true"
                 android:maxLength="1"
                 android:textSize="25sp"
                 android:layout_weight="1"
@@ -76,11 +104,8 @@
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Submit"
+                android:text="@string/submit"
                 android:id="@+id/submit"
-                android:layout_centerVertical="true"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true"
                 android:onClick="onSubmit"
                 android:textSize="20sp"
                 style="@style/ButtonAppTheme"

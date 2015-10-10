@@ -1,8 +1,10 @@
 package com.vanw.robbert.spookywords;
 
 import android.annotation.TargetApi;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -19,69 +21,76 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+//database
+import android.database.Cursor;
+import android.database.SQLException;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
+import android.database.sqlite.SQLiteOpenHelper;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 
 public class SelectPlayersActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     public ArrayList<Player> playerList;
     ArrayList<String> playerNames;
-    ArrayAdapter<String> adp;
+    ArrayAdapter<Player> adp;
 
-    boolean englishLex = true; // true by default for now
-    boolean p2;
+    boolean englishLex; // true by default for now
+    static boolean p2; // indicator if p2 is up to choose a name
 
-    String player1;
-    String player2;
+    Player player1;
+    Player player2;
     Spinner spinner1;
+    Spinner spinner2;
+    DBHelper myDB;
 
+    @TargetApi(Build.VERSION_CODES.KITKAT)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_players);
 
-        // dummy data for now
-        playerList = new ArrayList<>();
-        playerList.add(new Player("TestP1"));
-        playerList.add(new Player("TestP2"));
+        // set system locale as default language
+        englishLex = !Objects.equals(Locale.getDefault().getLanguage(), "nl");
+        Button langButton = (Button) findViewById(R.id.language);
+        langButton.setText((englishLex ? "English" : "Nederlands"));
 
-        // build up the list of names to be displayed in spinner
-        playerNames = new ArrayList<>();
-        // add a 'placeholder' for the spinner
-        playerNames.add(0,"I am..");
-        for (Player player : playerList) {
-            playerNames.add(player.getName());
-        }
+        // Database
+        myDB = new DBHelper(this);
+        if(myDB.numberOfRows(DBHelper.PLAYERS_TABLE_NAME) > 0)
+            playerList = myDB.getAllPlayers();
+        else playerList = new ArrayList<>();
+        // loadPlayers();
 
-        // setup the adapter and spinner
-        adp = new PlayersAdapter(this,R.layout.item_player,R.id.tvName,playerNames);
+        // setup the adapter and spinners
+        adp = new PlayersAdapter(this,R.layout.item_player,R.id.tvName,playerList);
         spinner1 = (Spinner) findViewById(R.id.spinner);
+        spinner2 = (Spinner) findViewById(R.id.spinner2);
         spinner1.setAdapter(adp);
+        spinner2.setAdapter(adp);
         spinner1.setOnItemSelectedListener(this);
+        spinner2.setOnItemSelectedListener(this);
 
     }
 
-    int spinnerCount = 0;
+
+
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
     {
-        // little tweak so onItemSelected won't fire prematurely
-        if (spinnerCount < 1)
-        {
-            spinnerCount++;
-        }
-        else
-        {
-            //only detect selection events that are not done whilst initializing
-            Log.i("SpinnerCount ", " = " + spinnerCount);
-            String player = playerNames.get(position);
-            if(p2) {
-                player2 = player;
-            }
-            else {
-                player1 = player;
-            }
-        }
+    Spinner spinner = (Spinner) parent;
+    Player player = playerList.get(position);
+    if(spinner.getId()== R.id.spinner) player1 = player;
+    else if(spinner.getId() == R.id.spinner2) player2 = player;
+    adp.notifyDataSetChanged();
     }
 
     @Override
@@ -114,33 +123,36 @@ public class SelectPlayersActivity extends AppCompatActivity implements AdapterV
     }
 
     public void addPlayer(View view) {
-        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        boolean p2;
+        p2 = view.getId() != R.id.p1plus;
+        final boolean finalp2 = p2;
+
+        AlertDialog.Builder alert = new AlertDialog.Builder(SelectPlayersActivity.this);
         final EditText edittext = new EditText(this.getApplicationContext());
         edittext.setTextColor(getResources().getColor(R.color.grey_dark));
         alert.setTitle("New player..");
         alert.setMessage("Hi! What's your name?");
-
         alert.setView(edittext);
-
+        
         alert.setPositiveButton("Okay", new DialogInterface.OnClickListener() {
             @TargetApi(Build.VERSION_CODES.KITKAT)
             public void onClick(DialogInterface dialog, int whichButton) {
                 String name = edittext.getText().toString();
                 if (!Objects.equals(name, "")) { // validate if not empty
-                    // playerList.add(0, new Player(name));
+                    Player newPlayer = new Player(name);
+                    playerList.add(newPlayer);
+                    myDB.insertPlayer(newPlayer);
 
-                    playerNames.add(1, name);
-                    spinner1.setSelection(1);
                     adp.notifyDataSetChanged();
-
-                    if(p2) {
-                        player2 = name;
-                        //startGame(player1,player2);
+                    if(finalp2) {
+                        player2 = newPlayer;
+                        spinner2.setSelection(playerList.size());
                     }
                     else {
-                        player1 = name;
-                        //switchPlayer();
+                        player1 = newPlayer;
+                        spinner1.setSelection(playerList.size());
                     }
+
                 }
             }
         }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -151,52 +163,36 @@ public class SelectPlayersActivity extends AppCompatActivity implements AdapterV
 
         alert.show();
     }
+
     public void switchLanguage(View view) {
         englishLex = !englishLex;
         Button langButton = (Button) findViewById(R.id.language);
-        langButton.setText("Language: "+(englishLex ? "English" : "Dutch"));
+        langButton.setText((englishLex ? "English" : "Nederlands"));
     }
     public void goButton (View view) {
-        // if p2 has pressed go and a name was filled in..
-        if(p2 && player2 != null) {
-            startGame(player1, player2);
+        if (player1 == null && player2 == null) {
+            Toast.makeText(this, R.string.play_select_two,Toast.LENGTH_SHORT).show();
         }
-        else if (player1 != null) {
-            p2 = true;
-            switchPlayer();
+        else if (player1 == player2) {
+            Toast.makeText(this, R.string.play_self,Toast.LENGTH_SHORT).show();
+        }
+        else {
+            startGame(player1,player2);
         }
     }
 
-    private void startGame(String player1, String player2) {
-        Intent i = new Intent(this, TestActivity.class);
+    private void startGame(Player player1, Player player2) {
+        Intent i = new Intent(this, GameActivity.class);
         i.putExtra("p1", player1);
         i.putExtra("p2", player2);
         i.putExtra("flag_EN", englishLex);
+        Log.v("SelectPlayersActivity flag_EN: ", String.valueOf(englishLex));
         startActivity(i);
     }
 
-    public void switchPlayer() {
-        TextView playerIndicator = (TextView) findViewById(R.id.p1);
-        TextView message = (TextView) findViewById(R.id.message);
-        spinnerCount--;
-        spinner1.setSelection(0);
-        if(p2) {
-            playerIndicator.setText("Player 2");
-            message.setText("And who is this again?");
-        }
-        else {
-            playerIndicator.setText("Player 1");
-            message.setText("Hi! Who are you?");
-        }
-    }
+
     @Override
     public void onBackPressed() {
-        // override the back button if p2 is on turn to choose
-        if (p2) {
-            p2 = false;
-            switchPlayer();
-            return;
-        }
 
         // Otherwise defer to system default behavior.
         super.onBackPressed();

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="preference_file_key" translatable="false">appPrefs</string>
+    <string name="toast_valid_character">Please fill in a valid character</string>
+    <string name="change_language_dialog">Changing language will reset your current game.. Continue?</string>
+    <string name="warning">Warning</string>
+    <string name="submit">OK</string>
+    <string name="rematch">Rematch!</string>
+    <string name="new_game">New game</string>
+    <string name="change_language">Change language</string>
+    <string name="settings">Settings</string>
+    <string name="highscores">Highscores</string>
+    <string name="pref_locale">en</string>
+    <string name="player1">Player 1</string>
+    <string name="player2">Player 2</string>
+    <string name="lang_en">Language: English</string>
+    <string name="go">Go!</string>
+    <string name="hello">Hello.. Who are you?</string>
+    <string name="play_self">Don\'t play with yourself!</string>
+    <string name="play_select_two">Please select two players</string>
+    <string name="language_switch">Language: English</string>
+    <string name="is_a_word">" is a word!"</string>
+    <string name="wins_this_time">" wins.. this time!"</string>
+    <string name="is_no_word">" can't spell any word!"</string>
+    <string name="last_word">"Last possible word: "</string>
+</resources>

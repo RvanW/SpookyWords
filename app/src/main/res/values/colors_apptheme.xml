@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="apptheme_color">#FF6500</color>
+    <color name="red_base">#ff446b</color>
     <color name="yellow_light">#F1EB00</color>
     <color name="yellow_dark">#ECEC56</color>
     <color name="orange_light">#ffaf5c</color>
