@@ -3,6 +3,7 @@ package com.vanw.robbert.spookywords;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
+import android.media.Image;
 import android.os.Build;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,7 +18,8 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 /**
- * Created by Robbert on 2-10-2015.
+ * Created by Robbert van Waardhuizen on 2-10-2015.
+ * Student number: 10543147
  */
 public class PlayersAdapter extends ArrayAdapter<Player> {
     Context context;
@@ -65,14 +67,18 @@ public class PlayersAdapter extends ArrayAdapter<Player> {
             row = inflater.inflate(layoutResourceId, parent, false);
         }
         TextView text1 = (TextView) row.findViewById(textViewId);
+        ImageView ivAvatar = (ImageView) row.findViewById(R.id.ivAvatar);
         //
-        if (!enabled) { // first element in the list is used as placeholder.. so don't display it
+        if (!enabled) { // if element in the list is disabled.. don't display it
             text1.setVisibility(View.GONE);
+            ivAvatar.setVisibility(View.GONE);
         }
         else if(players.get(position) != null) {
             Player player = players.get(position);
             text1.setVisibility(View.VISIBLE);
             text1.setText(player.getName());
+            ivAvatar.setVisibility(View.VISIBLE);
+            ivAvatar.setImageResource(player.avatarId);
         }
         // Return the completed view to render on screen
         return row;

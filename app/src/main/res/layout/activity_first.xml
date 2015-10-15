@@ -1,4 +1,4 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
@@ -8,70 +8,83 @@
     android:orientation="vertical"
     android:gravity="center_horizontal"
     android:background="@drawable/background_gradient_grey"
-    android:weightSum="5">
+    android:weightSum="6"
+    android:fillViewport="true">
 
     <LinearLayout
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:gravity="center_vertical|center_horizontal"
-        android:layout_weight="1" >
+        android:layout_height="match_parent"
+        android:weightSum="7">
 
-        <Button
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:gravity="center_vertical|center_horizontal"
+            android:layout_weight="1">
+
+            <Button
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/new_game"
+                android:id="@+id/button3"
+                android:onClick="newGame"
+                android:background="@drawable/custom_button" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:gravity="center_vertical|center_horizontal"
+            android:layout_weight="1" >
+
+            <Button
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/highscores"
+                android:id="@+id/button5"
+                android:onClick="highScores"
+                android:background="@drawable/custom_button"
+                android:layout_weight="1" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="Continue last game"
-            android:id="@+id/button"
-            android:onClick="continueGame"
-            android:background="@drawable/custom_button" />
+            android:layout_height="0dp"
+            android:gravity="center_horizontal"
+            android:layout_weight="5" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/recent_games"
+                android:id="@+id/textView4"
+                android:layout_gravity="center_horizontal"
+                android:textSize="16sp"
+                android:layout_margin="5dp" />
+
+            <ListView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/listView2" />
+            <TextView
+                android:id="@+id/empty_list_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/empty_games"
+                android:layout_gravity="center_horizontal"
+                android:visibility="gone" />
+        </LinearLayout>
+
     </LinearLayout>
 
-    <LinearLayout
-        android:orientation="horizontal"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:gravity="center_vertical|center_horizontal"
-        android:layout_weight="1">
+        android:layout_height="fill_parent"
+        android:id="@+id/settings_container"
+        android:clickable="false" />
 
-        <Button
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/new_game"
-            android:id="@+id/button3"
-            android:onClick="newGame"
-            android:background="@drawable/custom_button" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:gravity="center_vertical|center_horizontal"
-        android:layout_weight="1" >
-
-        <Button
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/highscores"
-            android:id="@+id/button5"
-            android:onClick="highScores"
-            android:background="@drawable/custom_button" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:gravity="center_vertical|center_horizontal"
-        android:layout_weight="1" >
-
-        <Button
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/settings"
-            android:id="@+id/button6"
-            android:onClick="openSettings"
-            android:background="@drawable/custom_button" />
-    </LinearLayout>
-
-</LinearLayout>
+</RelativeLayout>

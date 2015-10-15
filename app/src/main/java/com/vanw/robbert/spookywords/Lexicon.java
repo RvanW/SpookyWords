@@ -17,7 +17,8 @@ import java.util.Iterator;
 import java.util.Set;
 
 /**
- * Created by Robbert on 28-9-2015.
+ * Created by Robbert van Waardhuizen on 28-9-2015.
+ * Student number: 10543147
  */
 public class Lexicon implements Serializable {
     HashSet<String> baseLexicon;
@@ -56,7 +57,6 @@ public class Lexicon implements Serializable {
     }
     Lexicon(HashSet<String> testWords) {
         baseLexicon = new HashSet<>(testWords);
-
     }
     public void filter(String filterValue) {
         if (filterLexicon == null) { // create a filtered lexicon if none.. might increase performance instead of remove words
@@ -74,8 +74,7 @@ public class Lexicon implements Serializable {
                 if (!word.startsWith(filterValue)) { // delete words that do not start with value
                     setIterator.remove();
                 } else if (word.length() > 3 && word.equals(filterValue)) { // if word longer than 3 chars match filtervalue.. game over
-                    filterLexicon = new HashSet<>();
-                    filterLexicon.add(word);
+                    lastWord = word;
                     break;
                 }
             }
@@ -95,7 +94,7 @@ public class Lexicon implements Serializable {
     }
 
     public void reset() {
-        filterLexicon = new HashSet<>(baseLexicon);
+        filterLexicon = null;
         lastWord = null;
     }
 }

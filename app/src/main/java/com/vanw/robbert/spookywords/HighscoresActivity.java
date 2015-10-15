@@ -1,6 +1,5 @@
 package com.vanw.robbert.spookywords;
 
-import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -9,16 +8,11 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 
 public class HighscoresActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
-    CustomListViewAdapter customListViewAdapter;
+    HighscoreListViewAdapter highscoreListViewAdapter;
     ListView listView;
     ArrayList<Player> playerList;
     DBHelper myDB;
@@ -27,15 +21,15 @@ public class HighscoresActivity extends AppCompatActivity implements AdapterView
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_highscores);
-
+        setTitle(getResources().getString(R.string.title_activity_highscores));
         myDB = new DBHelper(this);
         playerList = myDB.getAllPlayers();
 
         Collections.sort(playerList, Player.COMPARE_BY_SCORE);
 
-        customListViewAdapter = new CustomListViewAdapter(this,R.layout.list_row,playerList);
+        highscoreListViewAdapter = new HighscoreListViewAdapter(this,R.layout.highscore_list_row,playerList);
         listView = (ListView) findViewById(R.id.listView);
-        listView.setAdapter(customListViewAdapter);
+        listView.setAdapter(highscoreListViewAdapter);
         listView.setOnItemClickListener(this);
     }
 

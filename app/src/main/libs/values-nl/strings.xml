@@ -2,13 +2,13 @@
 <resources>
     <string name="app_name">SpookyWords</string>
     <string name="action_settings">Opties</string>
-    <string name="change_language">Verander taal</string>
+    <string name="change_language">Language: Nederlands</string>
     <string name="change_language_dialog">Als je de taal veranderd reset je huidige game.. Doorgaan?</string>
     <string name="highscores">Topscores</string>
     <string name="new_game">Nieuw spel</string>
     <string name="rematch">Opnieuw!</string>
     <string name="settings">Opties</string>
-    <string name="submit">Ok</string>
+    <string name="submit">OK</string>
     <string name="title_activity_highscores">Topscores</string>
     <string name="title_activity_select_players">Spelers kiezen..</string>
     <string name="toast_valid_character">Vul een letter in</string>
@@ -26,4 +26,14 @@
     <string name="language_switch">Taal: Nederlands</string>
     <string name="last_word">"Laatst mogelijke woord: "</string>
     <string name="wins_this_time">" wint.. deze keer!"</string>
+    <string name="recent_games">Recente spellen</string>
+    <string name="select_new_players">Kies nieuwe spelers</string>
+    <string name="change_dict">Verander woordenboek taal</string>
+    <string name="change_system">Verander systeem taal</string>
+    <string name="delete_game_dialog">Weet je zeker dat je dit spel wilt verwijderen?</string>
+    <string name="new_player">Nieuwe speler..</string>
+    <string name="pick_avatar">Kies een avatar</string>
+    <string name="your_name">Wat is je naam?</string>
+    <string name="empty_games">Nog geen spellen</string>
+    <string name="empty_players">Voeg speler toe:</string>
 </resources>

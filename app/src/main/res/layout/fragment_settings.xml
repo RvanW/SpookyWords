@@ -34,26 +34,6 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:gravity="center_vertical"
-            android:layout_marginTop="50dp"
-            android:onClick="newGame">
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/new_game"
-                android:id="@+id/newGame_settings"
-                android:layout_gravity="center_horizontal"
-                android:nestedScrollingEnabled="false"
-                android:onClick="newGame"
-                android:background="@drawable/custom_button" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
             android:gravity="center_vertical">
 
             <Button
@@ -62,7 +42,7 @@
                 android:text="@string/change_language"
                 android:id="@+id/button2"
                 android:layout_gravity="center_horizontal"
-                android:onClick="onChangeLanguage"
+                android:onClick="switchLocaleLanguage_mainMenu"
                 android:background="@drawable/custom_button" />
         </LinearLayout>
     </LinearLayout>

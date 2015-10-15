@@ -4,21 +4,28 @@
     android:layout_height="wrap_content"
     android:gravity="center_horizontal"
     android:padding="10dp"
-    android:weightSum="2">
+    android:weightSum="4">
+
+    <ImageView
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:id="@+id/imageDisplay"
+        android:src="@drawable/avatar15" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Large Text"
+        android:text="Player name"
         android:id="@+id/nameDisplay"
-        android:layout_weight="1"
-        android:gravity="center_vertical" />
+        android:layout_weight="3"
+        android:gravity="center_vertical"
+        android:layout_gravity="center_vertical" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="New Text"
+        android:text="Score"
         android:id="@+id/scoreDisplay"
         android:layout_gravity="center_vertical"
         android:layout_weight="1"

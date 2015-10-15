@@ -12,13 +12,20 @@
         android:layout_height="wrap_content"
         android:id="@+id/linearLayout">
 
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="0dp"
+            android:id="@+id/flag"
+            android:src="@drawable/flag_en"
+            android:layout_weight="1"
+            android:layout_gravity="center_horizontal"
+            android:adjustViewBounds="true" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/textview1"
             android:textSize="20sp"
-            android:layout_below="@+id/reset"
-            android:layout_centerHorizontal="true"
             android:layout_marginTop="80dp"
             android:layout_gravity="center_horizontal"
             android:gravity="center_horizontal" />
@@ -47,29 +54,56 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:weightSum="2">
+        android:weightSum="4"
+        android:gravity="fill_horizontal"
+        android:baselineAligned="false">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Player 1"
-            android:id="@+id/p1tv"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:textSize="30dp"
-            android:layout_weight="1"
-            android:layout_gravity="center_vertical" />
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="2">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Player2"
-            android:id="@+id/p2tv"
-            android:layout_weight="1"
-            android:layout_gravity="center_vertical"
-            android:gravity="end"
-            android:textSize="30sp" />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:id="@+id/p1avatar"
+                android:layout_gravity="center_horizontal"
+                android:src="@drawable/avatar15" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:text="Player 1"
+                android:id="@+id/p1tv"
+                android:textSize="30sp"
+                android:layout_weight="2"
+                android:layout_gravity="center_vertical|left" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="2">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:id="@+id/p2avatar"
+                android:layout_gravity="center_horizontal"
+                android:src="@drawable/avatar1" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:text="Player2"
+                android:id="@+id/p2tv"
+                android:layout_weight="2"
+                android:layout_gravity="center_vertical|right"
+                android:gravity="end"
+                android:textSize="30sp" />
+        </LinearLayout>
 
     </LinearLayout>
 
@@ -86,9 +120,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="end"
-            android:weightSum="1"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true">
+            android:weightSum="1">
 
             <EditText
                 android:layout_width="0dp"

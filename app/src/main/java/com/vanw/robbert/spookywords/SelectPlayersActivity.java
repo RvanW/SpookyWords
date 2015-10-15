@@ -4,47 +4,41 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Build;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
+import android.widget.GridView;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
-//database
-import android.database.Cursor;
-import android.database.SQLException;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteException;
-import android.database.sqlite.SQLiteOpenHelper;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
-import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
 public class SelectPlayersActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     public ArrayList<Player> playerList;
-    ArrayList<String> playerNames;
     ArrayAdapter<Player> adp;
+    ArrayList<Integer> avatarIds;
+    ArrayAdapter<Integer> avatarAdapter;
+    GridView avatarGrid;
 
-    boolean englishLex; // true by default for now
-    static boolean p2; // indicator if p2 is up to choose a name
+    boolean englishLex;
 
     Player player1;
     Player player2;
@@ -57,7 +51,7 @@ public class SelectPlayersActivity extends AppCompatActivity implements AdapterV
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_players);
-
+        setTitle(getResources().getString(R.string.title_activity_select_players));
         // set system locale as default language
         englishLex = !Objects.equals(Locale.getDefault().getLanguage(), "nl");
         Button langButton = (Button) findViewById(R.id.language);
@@ -74,11 +68,24 @@ public class SelectPlayersActivity extends AppCompatActivity implements AdapterV
         adp = new PlayersAdapter(this,R.layout.item_player,R.id.tvName,playerList);
         spinner1 = (Spinner) findViewById(R.id.spinner);
         spinner2 = (Spinner) findViewById(R.id.spinner2);
+        spinner1.setEmptyView(findViewById(R.id.empty_spinner_view));
+        spinner2.setEmptyView(findViewById(R.id.empty_spinner2_view));
         spinner1.setAdapter(adp);
         spinner2.setAdapter(adp);
         spinner1.setOnItemSelectedListener(this);
         spinner2.setOnItemSelectedListener(this);
 
+        // get list of avatar ids, looping over possible avatar's (called avatar0 - avatar24)
+        // adding more avatars is as simple as adding images with correct name (avatar# + 1) now;
+        avatarIds = new ArrayList<>();
+        int i = 1;
+        while (true) {
+            i++;
+            int drawableId = this.getResources().getIdentifier("avatar"+i,"drawable",this.getPackageName());
+            if (drawableId == 0) break;
+            else avatarIds.add(drawableId);
+        }
+        avatarAdapter = new AvatarsGridViewAdapter(this,R.layout.avatar_grid_item,avatarIds);
     }
 
 
@@ -86,11 +93,15 @@ public class SelectPlayersActivity extends AppCompatActivity implements AdapterV
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
     {
-    Spinner spinner = (Spinner) parent;
-    Player player = playerList.get(position);
-    if(spinner.getId()== R.id.spinner) player1 = player;
-    else if(spinner.getId() == R.id.spinner2) player2 = player;
-    adp.notifyDataSetChanged();
+        Spinner spinner = (Spinner) parent;
+        Player player = playerList.get(position);
+        if(spinner.getId()== R.id.spinner) {
+            player1 = player;
+        }
+        else if(spinner.getId() == R.id.spinner2) {
+            player2 = player;
+        }
+        adp.notifyDataSetChanged();
     }
 
     @Override
@@ -127,24 +138,37 @@ public class SelectPlayersActivity extends AppCompatActivity implements AdapterV
         p2 = view.getId() != R.id.p1plus;
         final boolean finalp2 = p2;
 
+        LayoutInflater inflater = getLayoutInflater();
+        View dialogLayout = inflater.inflate(R.layout.dialog_layout, null);
         AlertDialog.Builder alert = new AlertDialog.Builder(SelectPlayersActivity.this);
-        final EditText edittext = new EditText(this.getApplicationContext());
-        edittext.setTextColor(getResources().getColor(R.color.grey_dark));
-        alert.setTitle("New player..");
-        alert.setMessage("Hi! What's your name?");
-        alert.setView(edittext);
-        
-        alert.setPositiveButton("Okay", new DialogInterface.OnClickListener() {
+        alert.setTitle(getString(R.string.new_player));
+        alert.setView(dialogLayout);
+        avatarGrid = (GridView) dialogLayout.findViewById(R.id.gridView);
+        avatarGrid.setChoiceMode(GridView.CHOICE_MODE_SINGLE);
+        avatarGrid.setAdapter(avatarAdapter);
+        avatarGrid.setItemChecked(0, true);
+        final int[] selectedAvatar = new int[1];
+        selectedAvatar[0] = avatarAdapter.getItem(0);
+        avatarGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                selectedAvatar[0] = avatarAdapter.getItem(position);
+            }
+        });
+
+        final EditText newName = (EditText) dialogLayout.findViewById(R.id.newName);
+
+        alert.setPositiveButton("Okay" ,new DialogInterface.OnClickListener() {
             @TargetApi(Build.VERSION_CODES.KITKAT)
             public void onClick(DialogInterface dialog, int whichButton) {
-                String name = edittext.getText().toString();
-                if (!Objects.equals(name, "")) { // validate if not empty
-                    Player newPlayer = new Player(name);
+                String name = newName.getText().toString();
+                if (!Objects.equals(name, "") && selectedAvatar[0] != 0) { // validate if name not empty
+                    Player newPlayer = new Player(name, selectedAvatar[0]);
                     playerList.add(newPlayer);
                     myDB.insertPlayer(newPlayer);
 
                     adp.notifyDataSetChanged();
-                    if(finalp2) {
+                    if(finalp2) { // the addplayer click came from p2
                         player2 = newPlayer;
                         spinner2.setSelection(playerList.size());
                     }
@@ -162,6 +186,9 @@ public class SelectPlayersActivity extends AppCompatActivity implements AdapterV
         });
 
         alert.show();
+        newName.requestFocus();
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
     }
 
     public void switchLanguage(View view) {
@@ -186,7 +213,6 @@ public class SelectPlayersActivity extends AppCompatActivity implements AdapterV
         i.putExtra("p1", player1);
         i.putExtra("p2", player2);
         i.putExtra("flag_EN", englishLex);
-        Log.v("SelectPlayersActivity flag_EN: ", String.valueOf(englishLex));
         startActivity(i);
     }
 

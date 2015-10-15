@@ -16,21 +16,24 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
- * Created by Robbert on 1-10-2015.
+ * Created by Robbert van Waardhuizen on 1-10-2015.
+ * Student number: 10543147
  */
 public class Player implements Serializable {
     String name;
     int score;
     String id;
+    Integer avatarId;
 
     public String getId() {
         return this.id;
     }
 
-    public Player(String name) {
+    public Player(String name, Integer avatar) {
         this.name = name;
         this.score = 0;
         this.id = UUIDGenerator.nextUUID();
+        this.avatarId = avatar;
     }
     public String getName() {
         return this.name;

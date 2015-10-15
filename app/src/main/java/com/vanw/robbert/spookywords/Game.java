@@ -5,9 +5,13 @@ import android.util.Log;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.TimeZone;
 
 /**
- * Created by Robbert on 28-9-2015.
+ * Created by Robbert van Waardhuizen on 28-9-2015.
+ * Student number: 10543147
  */
 public class Game implements Serializable {
     String id;
@@ -20,26 +24,27 @@ public class Game implements Serializable {
     public String message;
     Player p1;
     Player p2;
+    Date date;
 
     Game(Lexicon lexicon) {
         this.lexicon = lexicon;
-        this.id = UUIDGenerator.nextUUID();
+        if(this.id == null) this.id = UUIDGenerator.nextUUID();
+        Log.v("GAME ", "NEW ID CREATED!");
     }
 
     // constructor for replicating saved game state
-    Game(String id, Player player1, Player player2, boolean turn, boolean flag, String guessedLetters, String message ) {
+    Game(String id, Player player1, Player player2, boolean turn, boolean flag, String guessedLetters, String message, Date lastPlayed ) {
         this.id = id;
         this.p1 = player1;
         this.p2 = player2;
         this.turn = turn;
         this.flagEN = flag;
         this.guessedLetters = guessedLetters;
-
         this.message = message;
+        this.date = lastPlayed;
 
     }
     public void resetGame() {
-        this.lexicon.reset();
         turn = true;
         guessedLetters = "";
         message = null;
@@ -76,7 +81,6 @@ public class Game implements Serializable {
                 return true;
             }
         }
-        message = null;
         return false;
     }
 
@@ -110,4 +114,9 @@ public class Game implements Serializable {
         this.p1 = p1;
         this.p2 = p2;
     }
+    public static Comparator<Game> COMPARE_BY_DATE = new Comparator<Game>() {
+        public int compare(Game one, Game other) {
+            return one.date.after(other.date) ? -1 : one.date.before(other.date) ? +1 : 0;
+        }
+    };
 }

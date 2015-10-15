@@ -42,8 +42,8 @@
                 android:textSize="22sp" />
 
             <Spinner
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="0dp"
+                android:layout_height="80dp"
                 android:id="@+id/spinner"
                 android:spinnerMode="dropdown"
                 android:dropDownVerticalOffset="60dp"
@@ -51,17 +51,29 @@
                 android:padding="10dp"
                 android:layout_weight="1" />
 
-            <Button
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/empty_players"
+                android:id="@+id/empty_spinner_view"
+                android:textSize="22sp"
+                android:layout_margin="10dp"
+                android:gravity="center_horizontal"
+                android:visibility="gone"
+                android:layout_weight="1" />
+
+            <ImageButton
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:text="+"
                 android:id="@+id/p1plus"
                 android:onClick="addPlayer"
+                android:src="@android:drawable/ic_input_add"
                 android:background="@drawable/custom_button_round"
-                android:textSize="35sp"
+                android:textSize="25sp"
                 android:textStyle="bold"
                 android:textColor="@color/grey_light"
-                android:layout_gravity="center" />
+                android:layout_gravity="center"
+                android:contentDescription="@string/add_player" />
         </LinearLayout>
 
         <LinearLayout
@@ -80,8 +92,8 @@
                 android:textSize="22sp" />
 
             <Spinner
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
+                android:layout_width="0dp"
+                android:layout_height="80dp"
                 android:id="@+id/spinner2"
                 android:spinnerMode="dropdown"
                 android:dropDownVerticalOffset="60dp"
@@ -89,17 +101,31 @@
                 android:padding="10dp"
                 android:layout_weight="1" />
 
-            <Button
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/empty_players"
+                android:id="@+id/empty_spinner2_view"
+                android:textSize="22sp"
+                android:layout_margin="10dp"
+                android:gravity="center_horizontal"
+                android:visibility="gone"
+                android:layout_weight="1"
+                android:contextClickable="false" />
+
+
+            <ImageButton
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:text="+"
                 android:id="@+id/p2plus"
                 android:onClick="addPlayer"
+                android:src="@android:drawable/ic_input_add"
                 android:background="@drawable/custom_button_round"
-                android:textSize="35sp"
+                android:textSize="25sp"
                 android:textStyle="bold"
                 android:textColor="@color/grey_light"
-                android:layout_gravity="center" />
+                android:textAlignment="center"
+                android:contentDescription="@string/add_player" />
         </LinearLayout>
 
     </LinearLayout>
@@ -129,5 +155,7 @@
             android:layout_marginTop="15dp"
             android:onClick="goButton" />
     </LinearLayout>
+
+
 
 </LinearLayout>

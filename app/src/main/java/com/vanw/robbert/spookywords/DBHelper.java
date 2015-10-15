@@ -11,13 +11,17 @@ import android.util.Log;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.Locale;
 
 /**
- * Created by Robbert on 8-10-2015.
+ * Created by Robbert van Waardhuizen on 8-10-2015.
+ * Student number: 10543147
  */
 public class DBHelper extends SQLiteOpenHelper {
     private SQLiteDatabase database;
@@ -40,6 +44,8 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String GAMES_COLUMN_WINNER = "winner";
     public static final String GAMES_COLUMN_GUESSED_LETTERS = "guessedletters";
     public static final String GAMES_COLUMN_MESSAGE = "message";
+    // this is the maximum amount of games retrieved from database by getAllGames() sorted by date
+    public static final String GAMES_MAX_RECENT = "20";
 
     Gson gson;
 
@@ -110,13 +116,13 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public Cursor getPlayerData(String id){
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res =  db.rawQuery("select * from " + PLAYERS_TABLE_NAME + " where " + PLAYERS_COLUMN_ID + " = ?", new String[]{id});
-        return res;
+        return db.rawQuery("select * from " + PLAYERS_TABLE_NAME + " where " + PLAYERS_COLUMN_ID + " = ?", new String[]{id});
     }
 
     // get player object as json and convert it to Player
     public Player getPlayer(String id){
         Cursor res = getPlayerData(id);
+        res.moveToFirst();
         byte[] blob = res.getBlob(res.getColumnIndex(PLAYERS_COLUMN_PLAYER));
         String json = new String(blob);
         gson = new Gson();
@@ -127,8 +133,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public Cursor getGameData(String id){
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res =  db.rawQuery("select * from " + GAMES_TABLE_NAME + " where " + GAMES_COLUMN_ID + " = ? ", new String[]{id});
-        return res;
+        return db.rawQuery("select * from " + GAMES_TABLE_NAME + " where " + GAMES_COLUMN_ID + " = ? ", new String[]{id});
     }
 
     // get lexicon object as json and convert it to Lexicon
@@ -168,11 +173,19 @@ public class DBHelper extends SQLiteOpenHelper {
         String guessedLetters = res.getString(res.getColumnIndex(GAMES_COLUMN_GUESSED_LETTERS));
         // message
         String message = res.getString(res.getColumnIndex(GAMES_COLUMN_MESSAGE));
+        // date since last change;
+        Date lastPlayed = null;
+        DateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+        try {
+            lastPlayed = formatter.parse(res.getString(res.getColumnIndex(GAMES_COLUMN_DATE)));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         res.close();
 
 
 
-        return new Game(id, player1, player2, turn, flag, guessedLetters, message);
+        return new Game(id, player1, player2, turn, flag, guessedLetters, message, lastPlayed);
     }
 
     public Game getLastGame() {
@@ -181,9 +194,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
         if(res != null) {
             if (res.moveToFirst()) {
-                Log.v("Cursor: ", "movetolast, count: " + res.getCount());
                 String lastGameID = res.getString(res.getColumnIndex(GAMES_COLUMN_ID));
-                Log.v("LastGame ID: ", lastGameID);
                 res.close();
                 return getGame(lastGameID);
 
@@ -199,8 +210,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public int numberOfRows(String table_name){
         SQLiteDatabase db = this.getReadableDatabase();
-        int numRows = (int) DatabaseUtils.queryNumEntries(db, table_name);
-        return numRows;
+        return (int) DatabaseUtils.queryNumEntries(db, table_name);
     }
 
     public boolean updatePlayer(Player player)
@@ -227,7 +237,7 @@ public class DBHelper extends SQLiteOpenHelper {
         contentValues.put(GAMES_COLUMN_GUESSED_LETTERS, game.guessedLetters); // string
         contentValues.put(GAMES_COLUMN_MESSAGE, game.message); // ArrayList<String> to String
         contentValues.put(GAMES_COLUMN_DATE, getDateTime());
-        db.update(GAMES_TABLE_NAME, contentValues, GAMES_COLUMN_ID + " = ? ", new String[] { game.getId() } );
+        db.update(GAMES_TABLE_NAME, contentValues, GAMES_COLUMN_ID + " = ? ", new String[]{game.getId()});
         return true;
     }
 
@@ -271,7 +281,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public ArrayList<Game> getAllGames() {
         ArrayList<Game> array_list = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res =  db.rawQuery( "select * from " + GAMES_TABLE_NAME, null );
+        Cursor res =  db.rawQuery("select " + GAMES_COLUMN_ID + " from " + GAMES_TABLE_NAME + " ORDER BY datetime(" + GAMES_COLUMN_DATE + ") DESC LIMIT " + GAMES_MAX_RECENT, null);
         res.moveToFirst();
         gson = new Gson();
         while(!res.isAfterLast()){
@@ -284,8 +294,22 @@ public class DBHelper extends SQLiteOpenHelper {
 
         return array_list;
     }
+    public ArrayList<String> getAllGameIds() {
+        ArrayList<String> array_list = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res =  db.rawQuery("select " + GAMES_COLUMN_ID + " from " + GAMES_TABLE_NAME + " ORDER BY datetime(" + GAMES_COLUMN_DATE + ") DESC LIMIT " + GAMES_MAX_RECENT, null);
+        res.moveToFirst();
+        while(!res.isAfterLast()){
+            String id = res.getString(res.getColumnIndex(GAMES_COLUMN_ID));
+            array_list.add(id);
+            res.moveToNext();
+        }
+        res.close();
+
+        return array_list;
+    }
     private String getDateTime() {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
         Date date = new Date();
         return dateFormat.format(date);
     }
