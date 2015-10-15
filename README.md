@@ -16,4 +16,4 @@ Features:
 <img width="250px" src="http://i.imgur.com/0l4FZq9.png">
 <img width="250px" src="http://i.imgur.com/jlmNxYg.png">
 <img width="250px" src="http://i.imgur.com/BxZcfri.png">
-<img width="250px" src="http://i.imgur.com/zdHXXiK.png">
+<img width="250px" src="http://i.imgur.com/xgAaGej.png">
