@@ -1,26 +1,22 @@
-package com.vanw.robbert.spookywords;
+package nl.mprog.ghost;
 
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -32,19 +28,19 @@ import java.util.Objects;
 
 public class SelectPlayersActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
-    public ArrayList<Player> playerList;
-    ArrayAdapter<Player> adp;
-    ArrayList<Integer> avatarIds;
-    ArrayAdapter<Integer> avatarAdapter;
-    GridView avatarGrid;
+    private ArrayList<Player> playerList;
+    private ArrayAdapter<Player> adp;
+    private ArrayList<Integer> avatarIds;
+    private ArrayAdapter<Integer> avatarAdapter;
+    private GridView avatarGrid;
 
-    boolean englishLex;
+    private boolean englishLex;
 
-    Player player1;
-    Player player2;
-    Spinner spinner1;
-    Spinner spinner2;
-    DBHelper myDB;
+    private Player player1;
+    private Player player2;
+    private Spinner spinner1;
+    private Spinner spinner2;
+    private DBHelper myDB;
 
     @TargetApi(Build.VERSION_CODES.KITKAT)
     @Override
@@ -65,7 +61,7 @@ public class SelectPlayersActivity extends AppCompatActivity implements AdapterV
         // loadPlayers();
 
         // setup the adapter and spinners
-        adp = new PlayersAdapter(this,R.layout.item_player,R.id.tvName,playerList);
+        adp = new PlayersAdapter(this,R.layout.item_player, playerList);
         spinner1 = (Spinner) findViewById(R.id.spinner);
         spinner2 = (Spinner) findViewById(R.id.spinner2);
         spinner1.setEmptyView(findViewById(R.id.empty_spinner_view));
@@ -85,7 +81,7 @@ public class SelectPlayersActivity extends AppCompatActivity implements AdapterV
             if (drawableId == 0) break;
             else avatarIds.add(drawableId);
         }
-        avatarAdapter = new AvatarsGridViewAdapter(this,R.layout.avatar_grid_item,avatarIds);
+        avatarAdapter = new AvatarsGridViewAdapter(this, avatarIds);
     }
 
 
@@ -214,13 +210,5 @@ public class SelectPlayersActivity extends AppCompatActivity implements AdapterV
         i.putExtra("p2", player2);
         i.putExtra("flag_EN", englishLex);
         startActivity(i);
-    }
-
-
-    @Override
-    public void onBackPressed() {
-
-        // Otherwise defer to system default behavior.
-        super.onBackPressed();
     }
 }

@@ -1,36 +1,32 @@
-package com.vanw.robbert.spookywords;
+package nl.mprog.ghost;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
-import android.media.Image;
 import android.os.Build;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.RatingBar;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
 /**
  * Created by Robbert van Waardhuizen on 2-10-2015.
  * Student number: 10543147
  */
-public class PlayersAdapter extends ArrayAdapter<Player> {
-    Context context;
-    int layoutResourceId;
-    int textViewId;
-    ArrayList<Player> players = new ArrayList<>();
+class PlayersAdapter extends ArrayAdapter<Player> {
+    private Context context;
+    private int layoutResourceId;
+    private int textViewId;
+    private ArrayList<Player> players = new ArrayList<>();
 
-    public PlayersAdapter(Context context, int layoutResourceId, int textViewId, ArrayList<Player> players) {
-        super(context, layoutResourceId, textViewId, players);
-        this.textViewId = textViewId;
-        this.layoutResourceId = layoutResourceId;
+    public PlayersAdapter(Context context, int layoutResourceId, ArrayList<Player> players) {
+        super(context, R.layout.item_player, R.id.tvName, players);
+        this.textViewId = R.id.tvName;
+        this.layoutResourceId = R.layout.item_player;
         this.context = context;
         this.players = players;
 
@@ -59,7 +55,7 @@ public class PlayersAdapter extends ArrayAdapter<Player> {
         return true;
     }
 
-    public View getCustomView(int position, View convertView, ViewGroup parent, boolean enabled) {
+    private View getCustomView(int position, View convertView, ViewGroup parent, boolean enabled) {
         // Check if an existing view is being reused, otherwise inflate the view
         View row = convertView;
         if (row == null) {

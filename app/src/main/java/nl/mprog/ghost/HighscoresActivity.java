@@ -1,4 +1,4 @@
-package com.vanw.robbert.spookywords;
+package nl.mprog.ghost;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,10 +12,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class HighscoresActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
-    HighscoreListViewAdapter highscoreListViewAdapter;
-    ListView listView;
-    ArrayList<Player> playerList;
-    DBHelper myDB;
+    private HighscoreListViewAdapter highscoreListViewAdapter;
+    private ListView listView;
+    private ArrayList<Player> playerList;
+    private DBHelper myDB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,7 +27,7 @@ public class HighscoresActivity extends AppCompatActivity implements AdapterView
 
         Collections.sort(playerList, Player.COMPARE_BY_SCORE);
 
-        highscoreListViewAdapter = new HighscoreListViewAdapter(this,R.layout.highscore_list_row,playerList);
+        highscoreListViewAdapter = new HighscoreListViewAdapter(this, playerList);
         listView = (ListView) findViewById(R.id.listView);
         listView.setAdapter(highscoreListViewAdapter);
         listView.setOnItemClickListener(this);

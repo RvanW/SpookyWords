@@ -1,4 +1,4 @@
-package com.vanw.robbert.spookywords;
+package nl.mprog.ghost;
 
 /**
  * Created by Robbert van Waardhuizen on 6-10-2015.
@@ -15,15 +15,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import java.util.ArrayList;
 
-public class HighscoreListViewAdapter extends ArrayAdapter<Player> {
-    Context context;
-    int layoutResourceId;
-    ArrayList<Player> data = new ArrayList<Player>();
+class HighscoreListViewAdapter extends ArrayAdapter<Player> {
+    private Context context;
+    private int layoutResourceId;
+    private ArrayList<Player> data = new ArrayList<>();
 
-    public HighscoreListViewAdapter(Context context, int layoutResourceId,
+    public HighscoreListViewAdapter(Context context,
                                     ArrayList<Player> data) {
-        super(context, layoutResourceId, data);
-        this.layoutResourceId = layoutResourceId;
+        super(context, R.layout.highscore_list_row, data);
+        this.layoutResourceId = R.layout.highscore_list_row;
         this.context = context;
         this.data = data;
     }
@@ -31,7 +31,7 @@ public class HighscoreListViewAdapter extends ArrayAdapter<Player> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View row = convertView;
-        RecordHolder holder = null;
+        RecordHolder holder;
 
         if (row == null) {
             LayoutInflater inflater = ((Activity) context).getLayoutInflater();

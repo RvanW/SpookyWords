@@ -1,4 +1,4 @@
-package com.vanw.robbert.spookywords;
+package nl.mprog.ghost;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -34,15 +33,15 @@ import java.util.regex.Pattern;
 
 public class GameActivity extends AppCompatActivity {
 
-    Lexicon lexicon; // english
-    Lexicon alt_lexicon; // dutch
-    Game game;
+    private Lexicon lexicon; // english
+    private Lexicon alt_lexicon; // dutch
+    private Game game;
 
-    Boolean dictionaryEnglish;
-    int flagId;
-    DBHelper myDB;
-    Player player1;
-    Player player2;
+    private Boolean dictionaryEnglish;
+    private int flagId;
+    private DBHelper myDB;
+    private Player player1;
+    private Player player2;
 
 
 
@@ -185,7 +184,7 @@ public class GameActivity extends AppCompatActivity {
     }
 
     // Build the settings menu fragment, hide it, and put it in settings_container
-    public void createSettingsFragment() {
+    private void createSettingsFragment() {
         SettingsFragment settingsFragment = SettingsFragment.newInstance("ingame");
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction
@@ -194,7 +193,7 @@ public class GameActivity extends AppCompatActivity {
                 .commit();
     }
 
-    public void toggleSettings() {
+    private void toggleSettings() {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         Fragment fragment = getSupportFragmentManager().findFragmentByTag("settings");
         if(fragment.isVisible()) {
@@ -226,7 +225,7 @@ public class GameActivity extends AppCompatActivity {
             game.guess(letter); // counts as a guess if game is not ended already.
             if (game.ended()) { // save the player that wins because score changed
                 Log.v("Winner!", "score + 1");
-                game.getPlayerObject(game.winner()).addScore(1);
+                game.getPlayerObject(game.winner()).addScore();
                 // updates DB on score change;
                 myDB.updatePlayer(game.getPlayerObject(game.winner()));
                 // notify this activity of player change
@@ -263,7 +262,7 @@ public class GameActivity extends AppCompatActivity {
     }
 
     @TargetApi(Build.VERSION_CODES.KITKAT)
-    public void updateView() {
+    private void updateView() {
         // Update the current game letters
         TextView textView = (TextView) findViewById(R.id.textview1);
         textView.setText(Html.fromHtml(game.guessedLetters));
@@ -402,7 +401,7 @@ public class GameActivity extends AppCompatActivity {
 
 
     // static function to hide keyboard
-    public static void hide_keyboard(Activity activity) {
+    private static void hide_keyboard(Activity activity) {
         InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
         //Find the currently focused view, so we can grab the correct window token from it.
         View view = activity.getCurrentFocus();

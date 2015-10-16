@@ -1,31 +1,30 @@
-package com.vanw.robbert.spookywords;
+package nl.mprog.ghost;
 
 /**
  * Created by Robbert van Waardhuizen on 12-10-2015.
  * Student number: 10543147
+ * Used to create a gridView of possible avatars when creating a new player
  */
 
 import android.app.Activity;
 import android.content.Context;
-import android.media.Image;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 
-public class AvatarsGridViewAdapter extends ArrayAdapter<Integer> {
-    Context context;
-    int layoutResourceId;
-    ArrayList<Integer> data = new ArrayList<Integer>();
+class AvatarsGridViewAdapter extends ArrayAdapter<Integer> {
+    private Context context;
+    private int layoutResourceId;
+    private ArrayList<Integer> data = new ArrayList<>();
 
-    public AvatarsGridViewAdapter(Context context, int layoutResourceId,
+    public AvatarsGridViewAdapter(Context context,
                                   ArrayList<Integer> data) {
-        super(context, layoutResourceId, data);
-        this.layoutResourceId = layoutResourceId;
+        super(context, R.layout.avatar_grid_item, data);
+        this.layoutResourceId = R.layout.avatar_grid_item;
         this.context = context;
         this.data = data;
     }
@@ -33,7 +32,7 @@ public class AvatarsGridViewAdapter extends ArrayAdapter<Integer> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View row = convertView;
-        RecordHolder holder = null;
+        RecordHolder holder;
 
         if (row == null) {
             LayoutInflater inflater = ((Activity) context).getLayoutInflater();
@@ -59,6 +58,5 @@ public class AvatarsGridViewAdapter extends ArrayAdapter<Integer> {
     static class RecordHolder {
         Integer avatarId;
         ImageView avatarImage;
-        TextView score;
     }
 }

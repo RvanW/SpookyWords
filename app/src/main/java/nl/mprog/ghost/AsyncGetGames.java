@@ -1,4 +1,4 @@
-package com.vanw.robbert.spookywords;
+package nl.mprog.ghost;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -7,18 +7,16 @@ import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.logging.Handler;
-import java.util.logging.LogRecord;
 
 /**
  * Created by Robbert van Waardhuizen on 10-10-2015.
  * Student number: 10543147
  */
-public class AsyncGetGames extends AsyncTask<Void, Integer, ArrayList<Game>>
+class AsyncGetGames extends AsyncTask<Void, Integer, ArrayList<Game>>
 {
-    DBHelper dbHelper;
+    private DBHelper dbHelper;
     private Context context;
-    ProgressDialog progressDialog;
+    private ProgressDialog progressDialog;
 
     private OnTaskCompleted listener;
     public AsyncGetGames(Context context, OnTaskCompleted listener) {

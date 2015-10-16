@@ -1,4 +1,4 @@
-package com.vanw.robbert.spookywords;
+package nl.mprog.ghost;
 
 /**
  * Created by Robbert van Waardhuizen on 12-10-2015.
@@ -6,7 +6,6 @@ package com.vanw.robbert.spookywords;
  */
 import android.app.Activity;
 import android.content.Context;
-import android.media.Image;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,14 +19,14 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 public class RecentGamesListViewAdapter extends ArrayAdapter<Game> {
-    Context context;
-    int layoutResourceId;
-    ArrayList<Game> data = new ArrayList<Game>();
+    private Context context;
+    private int layoutResourceId;
+    private ArrayList<Game> data = new ArrayList<>();
 
-    public RecentGamesListViewAdapter(Context context, int layoutResourceId,
-                                 ArrayList<Game> data) {
-        super(context, layoutResourceId, data);
-        this.layoutResourceId = layoutResourceId;
+    public RecentGamesListViewAdapter(Context context,
+                                      ArrayList<Game> data) {
+        super(context, R.layout.game_list_row, data);
+        this.layoutResourceId = R.layout.game_list_row;
         this.context = context;
         this.data = data;
     }
@@ -35,7 +34,7 @@ public class RecentGamesListViewAdapter extends ArrayAdapter<Game> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View row = convertView;
-        RecordHolder holder = null;
+        RecordHolder holder;
 
         if (row == null) {
             LayoutInflater inflater = ((Activity) context).getLayoutInflater();

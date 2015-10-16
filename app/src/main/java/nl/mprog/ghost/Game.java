@@ -1,25 +1,22 @@
-package com.vanw.robbert.spookywords;
+package nl.mprog.ghost;
 
-import android.text.Html;
 import android.util.Log;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.TimeZone;
 
 /**
  * Created by Robbert van Waardhuizen on 28-9-2015.
  * Student number: 10543147
  */
 public class Game implements Serializable {
-    String id;
+    private String id;
     public String getId() { return this.id; }
     Lexicon lexicon;
     boolean flagEN;
-    boolean turn = true;
-    boolean winner;
+    private boolean turn = true;
+    private boolean winner;
     public String guessedLetters = "";
     public String message;
     Player p1;
@@ -84,7 +81,7 @@ public class Game implements Serializable {
         return false;
     }
 
-    public String setMessage(boolean isAWord, String guessedLetters, String winnerName) {
+    private String setMessage(boolean isAWord, String guessedLetters, String winnerName) {
         String fullMessage = "";
         fullMessage += (isAWord ? "is_a_word" : "is_no_word") + "||";
         fullMessage += (guessedLetters.replaceAll("\\<.*?>", "") + "||");
@@ -93,13 +90,6 @@ public class Game implements Serializable {
         return fullMessage;
     }
     public boolean winner() {
-        return winner;
-    }
-
-    public Player awardAndSaveWinner() {
-        Player winner = getPlayerObject(winner());
-        winner.addScore(1);
-        Log.v("WINNER: ", "winner awarded!");
         return winner;
     }
 

@@ -1,4 +1,4 @@
-package com.vanw.robbert.spookywords;
+package nl.mprog.ghost;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -6,7 +6,6 @@ import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -15,39 +14,32 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
-import java.util.Locale;
 
 /**
  * Created by Robbert van Waardhuizen on 8-10-2015.
  * Student number: 10543147
  */
-public class DBHelper extends SQLiteOpenHelper {
-    private SQLiteDatabase database;
-    private int oldVersion;
-    private int newVersion;
-    public static final String DATABASE_NAME = "MyDBName.db";
-    // players
+class DBHelper extends SQLiteOpenHelper {
+    private static final String DATABASE_NAME = "MyDBName.db";
+    // Table players
     public static final String PLAYERS_TABLE_NAME = "players";
-    public static final String PLAYERS_COLUMN_ID = "id";
-    public static final String PLAYERS_COLUMN_PLAYER = "player";
-    // games
+    private static final String PLAYERS_COLUMN_ID = "id";
+    private static final String PLAYERS_COLUMN_PLAYER = "player";
+    // Table games
     public static final String GAMES_TABLE_NAME = "games";
-    public static final String GAMES_COLUMN_ID = "id";
-    public static final String GAMES_COLUMN_DATE = "date";
-    public static final String GAMES_COLUMN_LEXICON = "lexicon";
-    public static final String GAMES_COLUMN_LANG_FLAG = "langflag";
-    public static final String GAMES_COLUMN_P1 = "p1";
-    public static final String GAMES_COLUMN_P2 = "p2";
-    public static final String GAMES_COLUMN_TURN = "turn";
-    public static final String GAMES_COLUMN_WINNER = "winner";
-    public static final String GAMES_COLUMN_GUESSED_LETTERS = "guessedletters";
-    public static final String GAMES_COLUMN_MESSAGE = "message";
+    private static final String GAMES_COLUMN_ID = "id";
+    private static final String GAMES_COLUMN_DATE = "date";
+    private static final String GAMES_COLUMN_LANG_FLAG = "langflag";
+    private static final String GAMES_COLUMN_P1 = "p1";
+    private static final String GAMES_COLUMN_P2 = "p2";
+    private static final String GAMES_COLUMN_TURN = "turn";
+    private static final String GAMES_COLUMN_GUESSED_LETTERS = "guessedletters";
+    private static final String GAMES_COLUMN_MESSAGE = "message";
     // this is the maximum amount of games retrieved from database by getAllGames() sorted by date
-    public static final String GAMES_MAX_RECENT = "20";
+    private static final String GAMES_MAX_RECENT = "20";
 
-    Gson gson;
+    private Gson gson;
 
     public DBHelper(Context context)
     {
@@ -58,12 +50,13 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        // TODO Auto-generated method stub
+        // Table players
         db.execSQL(
                 "CREATE TABLE " + PLAYERS_TABLE_NAME +
                         "(" + PLAYERS_COLUMN_ID + " string primary key, " +
                         PLAYERS_COLUMN_PLAYER + " BLOB)"
         );
+        // Table games
         db.execSQL(
                 "CREATE TABLE " + GAMES_TABLE_NAME +
                         "(" + GAMES_COLUMN_ID + " string primary key, " +
@@ -79,25 +72,22 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        // TODO Auto-generated method stub
         db.execSQL("DROP TABLE IF EXISTS " + PLAYERS_TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS " + GAMES_TABLE_NAME);
         onCreate(db);
     }
 
-    public boolean insertPlayer  (Player player)
+    public void insertPlayer(Player player)
     {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         gson = new Gson();
         contentValues.put(PLAYERS_COLUMN_ID, player.getId());
         contentValues.put(PLAYERS_COLUMN_PLAYER, gson.toJson(player).getBytes());
-
         db.insert(PLAYERS_TABLE_NAME, null, contentValues);
-        return true;
     }
 
-    public boolean insertGame  (Game game)
+    public void insertGame(Game game)
     {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
@@ -111,15 +101,14 @@ public class DBHelper extends SQLiteOpenHelper {
         contentValues.put(GAMES_COLUMN_MESSAGE, game.message); // String
         contentValues.put(GAMES_COLUMN_DATE, getDateTime());
         db.insert(GAMES_TABLE_NAME, null, contentValues);
-        return true;
     }
 
-    public Cursor getPlayerData(String id){
+    private Cursor getPlayerData(String id){
         SQLiteDatabase db = this.getReadableDatabase();
         return db.rawQuery("select * from " + PLAYERS_TABLE_NAME + " where " + PLAYERS_COLUMN_ID + " = ?", new String[]{id});
     }
 
-    // get player object as json and convert it to Player
+    // get player object as gson blob and convert it to Player object
     public Player getPlayer(String id){
         Cursor res = getPlayerData(id);
         res.moveToFirst();
@@ -131,24 +120,14 @@ public class DBHelper extends SQLiteOpenHelper {
         }.getType());
     }
 
-    public Cursor getGameData(String id){
+    private Cursor getGameData(String id){
         SQLiteDatabase db = this.getReadableDatabase();
         return db.rawQuery("select * from " + GAMES_TABLE_NAME + " where " + GAMES_COLUMN_ID + " = ? ", new String[]{id});
     }
 
-    // get lexicon object as json and convert it to Lexicon
-    public Lexicon getLexicon(String id){
-        Cursor res = getGameData(id);
-        if(res == null) return null;
-        res.moveToFirst();
-        byte[] blob = res.getBlob(res.getColumnIndex(GAMES_COLUMN_LEXICON));
-        String json = new String(blob);
-        gson = new Gson();
-        res.close();
-        return gson.fromJson(json, new TypeToken<Lexicon>() {
-        }.getType());
-    }
-    // construct the game from save (reload)
+    // construct the game from a save (reload)
+    // could not store the entire game object as gson, because it holds a Lexicon and two players (memory issues)
+    // therefore I pulled apart the game object saving the vital variables separately and reconstruct the lexicon based on 'guessedLetters'
     public Game getGame(String id){
         Cursor res = getGameData(id);
         if(res == null) return null;
@@ -183,26 +162,21 @@ public class DBHelper extends SQLiteOpenHelper {
         }
         res.close();
 
-
-
         return new Game(id, player1, player2, turn, flag, guessedLetters, message, lastPlayed);
     }
 
     public Game getLastGame() {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor res = db.rawQuery("select id from " + GAMES_TABLE_NAME + " ORDER BY datetime(" + GAMES_COLUMN_DATE + ") DESC LIMIT 1", null);
-
         if(res != null) {
             if (res.moveToFirst()) {
                 String lastGameID = res.getString(res.getColumnIndex(GAMES_COLUMN_ID));
                 res.close();
                 return getGame(lastGameID);
-
-            } else { // if no rows
+            } else {
                 return null;
             }
         }
-        // if cursor selected nothing return null
         else {
             return null;
         }
@@ -213,7 +187,7 @@ public class DBHelper extends SQLiteOpenHelper {
         return (int) DatabaseUtils.queryNumEntries(db, table_name);
     }
 
-    public boolean updatePlayer(Player player)
+    public void updatePlayer(Player player)
     {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
@@ -221,10 +195,9 @@ public class DBHelper extends SQLiteOpenHelper {
         contentValues.put(PLAYERS_COLUMN_PLAYER, gson.toJson(player).getBytes());
         contentValues.put(PLAYERS_COLUMN_ID, player.getId());
         db.update(PLAYERS_TABLE_NAME, contentValues, PLAYERS_COLUMN_ID + " = ? ", new String[] { player.getId() } );
-        return true;
     }
 
-    public boolean updateGame(Game game)
+    public void updateGame(Game game)
     {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
@@ -238,7 +211,6 @@ public class DBHelper extends SQLiteOpenHelper {
         contentValues.put(GAMES_COLUMN_MESSAGE, game.message); // ArrayList<String> to String
         contentValues.put(GAMES_COLUMN_DATE, getDateTime());
         db.update(GAMES_TABLE_NAME, contentValues, GAMES_COLUMN_ID + " = ? ", new String[]{game.getId()});
-        return true;
     }
 
     public Integer deletePlayer (String id)
@@ -249,10 +221,10 @@ public class DBHelper extends SQLiteOpenHelper {
                 new String[] { id });
     }
 
-    public Integer deleteGame (String id)
+    public void deleteGame(String id)
     {
         SQLiteDatabase db = this.getWritableDatabase();
-        return db.delete(GAMES_TABLE_NAME,
+        db.delete(GAMES_TABLE_NAME,
                 "id = ? ",
                 new String[] { id });
     }

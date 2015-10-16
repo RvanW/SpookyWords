@@ -1,8 +1,6 @@
-package com.vanw.robbert.spookywords;
+package nl.mprog.ghost;
 
 import android.annotation.TargetApi;
-import android.app.Activity;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -21,7 +19,7 @@ import java.util.Objects;
 public class SettingsFragment extends android.support.v4.app.Fragment {
     // the fragment initialization parameter
     // this is used to determine if menu was opened in game
-    protected static final String ARG_INGAME = "ingame";
+    private static final String ARG_INGAME = "ingame";
 
     private String inGame;
 

@@ -1,28 +1,23 @@
-package com.vanw.robbert.spookywords;
+package nl.mprog.ghost;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.res.AssetManager;
-import android.net.Uri;
 import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Set;
 
 /**
  * Created by Robbert van Waardhuizen on 28-9-2015.
  * Student number: 10543147
  */
-public class Lexicon implements Serializable {
-    HashSet<String> baseLexicon;
-    HashSet<String> filterLexicon;
+class Lexicon implements Serializable {
+    private HashSet<String> baseLexicon;
+    private HashSet<String> filterLexicon;
     String lastWord;
 
     Lexicon(Context context, String sourcePath)  {
@@ -55,11 +50,9 @@ public class Lexicon implements Serializable {
             }
         }
     }
-    Lexicon(HashSet<String> testWords) {
-        baseLexicon = new HashSet<>(testWords);
-    }
     public void filter(String filterValue) {
-        if (filterLexicon == null) { // create a filtered lexicon if none.. might increase performance instead of remove words
+        // I refactored this to add words to the filtered list initially, instead of removing words from the big base lexicon
+        if (filterLexicon == null) {
             filterLexicon = new HashSet<>();
             for (String word : baseLexicon) {
                 if (word.startsWith(filterValue)) { // add words that start with value
@@ -67,6 +60,7 @@ public class Lexicon implements Serializable {
                 }
             }
         }
+
         else {
             Iterator setIterator = filterLexicon.iterator();
             while (setIterator.hasNext()) {
@@ -84,7 +78,7 @@ public class Lexicon implements Serializable {
         }
     }
 
-    public String result() {
+    private String result() {
         return filterLexicon.iterator().next();
     }
 
@@ -98,5 +92,3 @@ public class Lexicon implements Serializable {
         lastWord = null;
     }
 }
-
-//Lexicon lexicon = new Lexicon("values/lexicon");

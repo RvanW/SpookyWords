@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.vanw.robbert.spookywords" >
+    package="nl.mprog.ghost" >
 
     <application
         android:allowBackup="true"
@@ -10,7 +10,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".FirstActivity"
+            android:name="nl.mprog.ghost.FirstActivity"
             android:label="@string/app_name"
             android:icon="@mipmap/ic_launcher"
             android:screenOrientation="portrait"
@@ -22,41 +22,41 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".GameActivity"
+            android:name="nl.mprog.ghost.GameActivity"
             android:label="@string/app_name"
             android:icon="@mipmap/ic_launcher"
-            android:parentActivityName=".FirstActivity"
+            android:parentActivityName="nl.mprog.ghost.FirstActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize"
             tools:ignore="UnusedAttribute"
             android:configChanges="layoutDirection|locale">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.vanw.robbert.spookywords.FirstActivity" />
+                android:value="nl.mprog.ghost.FirstActivity" />
         </activity>
         <activity
-            android:name=".SelectPlayersActivity"
+            android:name="nl.mprog.ghost.SelectPlayersActivity"
             android:label="@string/title_activity_select_players"
             android:icon="@mipmap/ic_launcher"
-            android:parentActivityName=".FirstActivity"
+            android:parentActivityName="nl.mprog.ghost.FirstActivity"
             android:screenOrientation="portrait"
             tools:ignore="UnusedAttribute"
             android:configChanges="layoutDirection|locale">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".FirstActivity" />
+                android:value="nl.mprog.ghost.FirstActivity" />
         </activity>
         <activity
-            android:name=".HighscoresActivity"
+            android:name="nl.mprog.ghost.HighscoresActivity"
             android:label="@string/title_activity_highscores"
             android:icon="@mipmap/ic_launcher"
-            android:parentActivityName=".FirstActivity"
+            android:parentActivityName="nl.mprog.ghost.FirstActivity"
             android:screenOrientation="portrait"
             tools:ignore="UnusedAttribute"
             android:configChanges="layoutDirection|locale">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".FirstActivity" />
+                android:value="nl.mprog.ghost.FirstActivity" />
         </activity>
     </application>
 

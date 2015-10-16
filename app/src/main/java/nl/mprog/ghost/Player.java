@@ -1,28 +1,16 @@
-package com.vanw.robbert.spookywords;
-
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.util.Log;
-
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
+package nl.mprog.ghost;
 
 import java.io.Serializable;
-import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicLong;
-import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * Created by Robbert van Waardhuizen on 1-10-2015.
  * Student number: 10543147
  */
 public class Player implements Serializable {
-    String name;
-    int score;
-    String id;
+    private String name;
+    private int score;
+    private String id;
     Integer avatarId;
 
     public String getId() {
@@ -44,8 +32,8 @@ public class Player implements Serializable {
     public int getScore() {
         return this.score;
     }
-    public void addScore(int points) {
-        score += points;
+    public void addScore() {
+        score += 1;
     }
 
     

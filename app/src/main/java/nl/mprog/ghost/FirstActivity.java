@@ -1,4 +1,4 @@
-package com.vanw.robbert.spookywords;
+package nl.mprog.ghost;
 
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
@@ -7,7 +7,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.net.Uri;
 import android.os.Build;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -19,17 +18,16 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Objects;
 
 public class FirstActivity extends AppCompatActivity implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener ,OnTaskCompleted {
-    DBHelper myDB;
-    public RecentGamesListViewAdapter recentGamesListViewAdapter;
-    ListView listView;
-    public ArrayList<Game> gameList;
+    private DBHelper myDB;
+    private RecentGamesListViewAdapter recentGamesListViewAdapter;
+    private ListView listView;
+    private ArrayList<Game> gameList;
 
     @Override
     public void onTaskCompleted(ArrayList<Game> gameList) {
@@ -62,7 +60,7 @@ public class FirstActivity extends AppCompatActivity implements AdapterView.OnIt
         new AsyncGetGames(this, this).execute();
 
         // setup the adapter and listview click listeners
-        recentGamesListViewAdapter = new RecentGamesListViewAdapter(this,R.layout.game_list_row,gameList);
+        recentGamesListViewAdapter = new RecentGamesListViewAdapter(this, gameList);
         listView = (ListView) findViewById(R.id.listView2);
         listView.setEmptyView(findViewById(R.id.empty_list_view));
         listView.setAdapter(recentGamesListViewAdapter);
@@ -116,7 +114,7 @@ public class FirstActivity extends AppCompatActivity implements AdapterView.OnIt
         startSavedGame(lastGame);
     }
 
-    public void startSavedGame(Game game) {
+    private void startSavedGame(Game game) {
         if(game != null) {
             Intent i = new Intent(this, GameActivity.class);
             Bundle extras = new Bundle();
@@ -127,7 +125,7 @@ public class FirstActivity extends AppCompatActivity implements AdapterView.OnIt
     }
 
     // first we create and hide the fragment
-    public void createSettingsFragment() {
+    private void createSettingsFragment() {
 
         // Build and replace the settings menu fragment in settings_container
         SettingsFragment settingsFragment = SettingsFragment.newInstance("outgame");
@@ -138,7 +136,7 @@ public class FirstActivity extends AppCompatActivity implements AdapterView.OnIt
                 .commit();
     }
     // check visibility of fragment and toggle
-    public void toggleSettings() {
+    private void toggleSettings() {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         Fragment fragment = getSupportFragmentManager().findFragmentByTag("settings");
         if (fragment.isVisible()) {
