@@ -1,7 +1,7 @@
 # SpookyWords <img width="50px" src="http://i.imgur.com/EDsDqhR.png">  <br />
 
 
-A turn-based wordgame for Android where the goal is to NOT spell a word. <br />
+A turn-based wordgame for Android where the goal is NOT to spell a word. <br />
 <br />
 ## Features:
 *	Turn-based multiplayer (on one device)
@@ -9,15 +9,13 @@ A turn-based wordgame for Android where the goal is to NOT spell a word. <br />
 *	Autosave progress multiple matches
 *	Make player profiles, and pick an avatar!
 *	Highscores<br/>
-
-***
-
+<br/>
 ## Installation
 *	Download and unpack this repository in any directory
 * In Android Studio: File > Open >  browse to directory..
 *	When loading is finished, run the app by pressing play (shift+f10)
 *	Enjoy!
-
+<br/>
 <img width="250px" src="http://i.imgur.com/VMifcgd.png">
 <img width="250px" src="http://i.imgur.com/0l4FZq9.png">
 <img width="250px" src="http://i.imgur.com/jlmNxYg.png">
