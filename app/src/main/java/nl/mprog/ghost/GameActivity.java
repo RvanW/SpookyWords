@@ -16,7 +16,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -43,8 +42,6 @@ public class GameActivity extends AppCompatActivity {
     private Player player1;
     private Player player2;
 
-
-
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         // Always call the superclass so it can save the view hierarchy state
@@ -64,27 +61,19 @@ public class GameActivity extends AppCompatActivity {
         if (savedInstanceState != null) {
             // Restore game state if there is any
             game = (Game) savedInstanceState.getSerializable("game");
-            Log.v("GAME", "Saved instance found");
-        }
-        else if (game != null) {
-            // make sure there is no game running, might be redundant
-            Log.v("GAME", "Running game found..");
         }
 
         // here a game is recreated (from recent games)
         else if (extras.getSerializable("game") != null) {
-            Log.v("GAME", "Continue game found..");
             game = (Game) extras.getSerializable("game");
             if(extras.containsKey("flag_EN")) {
                 game.flagEN = extras.getBoolean("flag_EN");
-
             }
             if (game != null) {
                 // update players  in this game from DB because score may have changed from other games
                 player1 = myDB.getPlayer(game.p1.getId());
                 player2 = myDB.getPlayer(game.p2.getId());
-                game.p1 = player1;
-                game.p2 = player2;
+                game.setPlayers(player1,player2);
                 if(game.flagEN) { // determine which language and rebuild lexicon
                     lexicon = new Lexicon(this, ("english.txt"));
                     lexicon.filter(game.guessedLetters);
@@ -97,30 +86,18 @@ public class GameActivity extends AppCompatActivity {
                 }
                 dictionaryEnglish = game.flagEN;
             }
-
-
         }
-        else if (extras.containsKey("gameID")) { // this is only true if a user switches locale (system) languages
-            // get language
+        // this is only true if a user switches locale (system) languages
+        else if (extras.containsKey("gameID")) {
             dictionaryEnglish = extras.getBoolean("flag_EN");
+            // sync the game with game from DB
             game = myDB.getGame(extras.getString("gameID"));
-            if(dictionaryEnglish) {
-                lexicon = new Lexicon(this, "english.txt");
-                // update and reset game lexicon
-                game.lexicon = lexicon;
-            }
-            else {
-                alt_lexicon = new Lexicon(this, "dutch.txt");
-                // update and reset game lexicon
-                game.lexicon = alt_lexicon;
-            }
-            game.resetGame();
-            new AsyncSaveGame(this).execute(game);
+            player1 = (Player) extras.getSerializable("p1");
+            player2 = (Player) extras.getSerializable("p2");
         }
 
-        // if all conditions are false we are creating a new game from scratch
+        // if all these conditions are false we are creating a new game from scratch
         else {
-            Log.v("GAME", "Creating new game and lexicon..");
             // load up the two players from intent
             if(player1 == null) player1 = (Player) extras.getSerializable("p1");
             if(player2 == null) player2 = (Player) extras.getSerializable("p2");
@@ -148,11 +125,11 @@ public class GameActivity extends AppCompatActivity {
             p1image.setImageResource(player1.avatarId);
             p2image.setImageResource(player2.avatarId);
         }
-
         createSettingsFragment();
         updateView();
     }
 
+    // auto save to db on pause
     @Override
     protected void onPause(){
         myDB.updatePlayer(game.p1);
@@ -221,10 +198,9 @@ public class GameActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), R.string.toast_valid_character,
                     Toast.LENGTH_SHORT).show();
         }
-        else if(!game.ended()) {
+        else {
             game.guess(letter); // counts as a guess if game is not ended already.
             if (game.ended()) { // save the player that wins because score changed
-                Log.v("Winner!", "score + 1");
                 game.getPlayerObject(game.winner()).addScore();
                 // updates DB on score change;
                 myDB.updatePlayer(game.getPlayerObject(game.winner()));
@@ -239,27 +215,7 @@ public class GameActivity extends AppCompatActivity {
 
     }
 
-    // Since the app uses different Locales, I need to build up my string in this activity to get access to string resources
-    // Little bit dirty but does the trick nicely
-    @TargetApi(Build.VERSION_CODES.KITKAT)
-    private String convertMessage() {
-        String messageString = "";
-        if(game.message != null && !Objects.equals(game.message, "")) {
-            String[] splittedMessage = game.message.split(Pattern.quote("||"));
-            if(Objects.equals(splittedMessage[0], "is_a_word")) {
-                messageString = splittedMessage[1] + getString(R.string.is_a_word)+"\r\n"
-                        + splittedMessage[2] + getString(R.string.wins_this_time);
-            }
-            else if(Objects.equals(splittedMessage[0], "is_no_word")) {
-                messageString = splittedMessage[1] + getString(R.string.is_no_word)+"\r\n"
-                        + splittedMessage[2] + getString(R.string.wins_this_time);
-                if (splittedMessage.length == 4) {
-                    messageString += "\r\n" + getString(R.string.last_word) + "'" + splittedMessage[3] + "'";
-                }
-            }
-        }
-        return messageString;
-    }
+
 
     @TargetApi(Build.VERSION_CODES.KITKAT)
     private void updateView() {
@@ -270,7 +226,7 @@ public class GameActivity extends AppCompatActivity {
         String messageString = convertMessage();
         TextView message = (TextView) findViewById(R.id.message);
         message.setText(messageString);
-        // two textviews indicating player names..
+        // two textviews indicating player names and score..
         TextView p1tv = (TextView) findViewById(R.id.p1tv);
         TextView p2tv = (TextView) findViewById(R.id.p2tv);
         p1tv.setText(game.p1.getName() + " (" + game.p1.getScore() + ")");
@@ -284,7 +240,7 @@ public class GameActivity extends AppCompatActivity {
         Button rematchButton = (Button) findViewById(R.id.rematch);
         // set the image indicating language
         int uri = dictionaryEnglish ? R.drawable.flag_en : R.drawable.flag_nl;
-        if(flagId != uri) {
+        if(flagId != uri) { // if not set already..
             flagId = uri;
             Drawable res = ContextCompat.getDrawable(this,uri);
             ImageView imageView = (ImageView) findViewById(R.id.flag);
@@ -303,6 +259,28 @@ public class GameActivity extends AppCompatActivity {
             rematchButton.setVisibility(View.GONE);
             textInput.setText("");
         }
+    }
+
+    // Since the app uses different Locales, I need to build up my string in this activity to get access to string resources
+    // Might look dirty but works nicely
+    @TargetApi(Build.VERSION_CODES.KITKAT)
+    private String convertMessage() {
+        String messageString = "";
+        if(game.message != null && !Objects.equals(game.message, "")) {
+            String[] splittedMessage = game.message.split(Pattern.quote("||"));
+            if(Objects.equals(splittedMessage[0], "is_a_word")) {
+                messageString = splittedMessage[1] + getString(R.string.is_a_word)+"\r\n"
+                        + splittedMessage[2] + getString(R.string.wins_this_time);
+            }
+            else if(Objects.equals(splittedMessage[0], "is_no_word")) {
+                messageString = splittedMessage[1] + getString(R.string.is_no_word)+"\r\n"
+                        + splittedMessage[2] + getString(R.string.wins_this_time);
+                if (splittedMessage.length == 4) {
+                    messageString += "\r\n" + getString(R.string.last_word) + "'" + splittedMessage[3] + "'";
+                }
+            }
+        }
+        return messageString;
     }
 
     public void newGame(View v) {
@@ -329,6 +307,8 @@ public class GameActivity extends AppCompatActivity {
         updateView();
         // if button was fired from settings menu, toggle settings fragment
         if(v == null || v.getId() == R.id.newGame_settings) toggleSettings();
+        // save new game
+        new AsyncSaveGame(this).execute(game);
     }
 
     @TargetApi(Build.VERSION_CODES.KITKAT)
@@ -355,6 +335,7 @@ public class GameActivity extends AppCompatActivity {
 
     @TargetApi(Build.VERSION_CODES.KITKAT)
     public void switchLocaleLanguage(View view) {
+        // detect which language is currently set and switch to the alternative
         String lang;
         if(Objects.equals(Locale.getDefault().getLanguage(), "en")) {
             lang = "nl";
@@ -375,22 +356,25 @@ public class GameActivity extends AppCompatActivity {
         prefs.edit().putString("system_lang", lang).apply();
 
         // refresh activity for locale changes to take effect
-        Bundle extras = getIntent().getExtras();
-        extras.putString("gameID", game.getId());
+        Bundle extras = new Bundle();
+        extras.putSerializable("gameID", game.getId());
         extras.putBoolean("flag_EN", dictionaryEnglish);
         extras.putSerializable("p1", player1);
         extras.putSerializable("p2", player2);
         Intent i = new Intent(this, GameActivity.class).putExtras(extras);
         startActivity(i);
         this.finish();
+    }
 
+    public void selectNewPlayers(View view) {
+        Intent i = new Intent(this, SelectPlayersActivity.class);
+        startActivity(i);
     }
 
     // override onbackpressed so the settings fragment can be closed by pressing up/back
     @Override
     public void onBackPressed() {
         int count = getFragmentManager().getBackStackEntryCount();
-        Log.v("frag_count: ", count + "");
         if (count == 0) {
             super.onBackPressed();
 
@@ -413,8 +397,4 @@ public class GameActivity extends AppCompatActivity {
     }
 
 
-    public void selectNewPlayers(View view) {
-        Intent i = new Intent(this, SelectPlayersActivity.class);
-        startActivity(i);
-    }
 }

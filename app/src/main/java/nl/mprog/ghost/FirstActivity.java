@@ -154,6 +154,7 @@ public class FirstActivity extends AppCompatActivity implements AdapterView.OnIt
         }
     }
 
+    // switch system language
     @TargetApi(Build.VERSION_CODES.KITKAT)
     public void switchLocaleLanguage_mainMenu(View view) {
         String lang;

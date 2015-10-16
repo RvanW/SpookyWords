@@ -48,7 +48,7 @@ public class SelectPlayersActivity extends AppCompatActivity implements AdapterV
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_players);
         setTitle(getResources().getString(R.string.title_activity_select_players));
-        // set system locale as default language
+        // set system locale as default language for dictionary
         englishLex = !Objects.equals(Locale.getDefault().getLanguage(), "nl");
         Button langButton = (Button) findViewById(R.id.language);
         langButton.setText((englishLex ? "English" : "Nederlands"));
@@ -58,7 +58,6 @@ public class SelectPlayersActivity extends AppCompatActivity implements AdapterV
         if(myDB.numberOfRows(DBHelper.PLAYERS_TABLE_NAME) > 0)
             playerList = myDB.getAllPlayers();
         else playerList = new ArrayList<>();
-        // loadPlayers();
 
         // setup the adapter and spinners
         adp = new PlayersAdapter(this,R.layout.item_player, playerList);
@@ -72,7 +71,7 @@ public class SelectPlayersActivity extends AppCompatActivity implements AdapterV
         spinner2.setOnItemSelectedListener(this);
 
         // get list of avatar ids, looping over possible avatar's (called avatar0 - avatar24)
-        // adding more avatars is as simple as adding images with correct name (avatar# + 1) now;
+        // adding more avatars is as simple as adding drawables with correct name (avatar# + 1) now;
         avatarIds = new ArrayList<>();
         int i = 1;
         while (true) {
@@ -105,8 +104,6 @@ public class SelectPlayersActivity extends AppCompatActivity implements AdapterV
         // do nothing!
     }
 
-
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -133,12 +130,10 @@ public class SelectPlayersActivity extends AppCompatActivity implements AdapterV
         boolean p2;
         p2 = view.getId() != R.id.p1plus;
         final boolean finalp2 = p2;
-
+        // inflate the dialog layout
         LayoutInflater inflater = getLayoutInflater();
         View dialogLayout = inflater.inflate(R.layout.dialog_layout, null);
-        AlertDialog.Builder alert = new AlertDialog.Builder(SelectPlayersActivity.this);
-        alert.setTitle(getString(R.string.new_player));
-        alert.setView(dialogLayout);
+        // setup avatar gridView
         avatarGrid = (GridView) dialogLayout.findViewById(R.id.gridView);
         avatarGrid.setChoiceMode(GridView.CHOICE_MODE_SINGLE);
         avatarGrid.setAdapter(avatarAdapter);
@@ -152,8 +147,11 @@ public class SelectPlayersActivity extends AppCompatActivity implements AdapterV
             }
         });
 
+        // setup the dialog
+        AlertDialog.Builder alert = new AlertDialog.Builder(SelectPlayersActivity.this);
+        alert.setTitle(getString(R.string.new_player));
+        alert.setView(dialogLayout);
         final EditText newName = (EditText) dialogLayout.findViewById(R.id.newName);
-
         alert.setPositiveButton("Okay" ,new DialogInterface.OnClickListener() {
             @TargetApi(Build.VERSION_CODES.KITKAT)
             public void onClick(DialogInterface dialog, int whichButton) {
@@ -162,7 +160,6 @@ public class SelectPlayersActivity extends AppCompatActivity implements AdapterV
                     Player newPlayer = new Player(name, selectedAvatar[0]);
                     playerList.add(newPlayer);
                     myDB.insertPlayer(newPlayer);
-
                     adp.notifyDataSetChanged();
                     if(finalp2) { // the addplayer click came from p2
                         player2 = newPlayer;
@@ -177,11 +174,12 @@ public class SelectPlayersActivity extends AppCompatActivity implements AdapterV
             }
         }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
-                // what ever you want to do with No option.
+                // do nothing
             }
         });
-
         alert.show();
+
+        // show keyboard
         newName.requestFocus();
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
@@ -193,7 +191,7 @@ public class SelectPlayersActivity extends AppCompatActivity implements AdapterV
         langButton.setText((englishLex ? "English" : "Nederlands"));
     }
     public void goButton (View view) {
-        if (player1 == null && player2 == null) {
+        if (player1 == null || player2 == null) {
             Toast.makeText(this, R.string.play_select_two,Toast.LENGTH_SHORT).show();
         }
         else if (player1 == player2) {

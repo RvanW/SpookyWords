@@ -6,7 +6,9 @@ import java.util.Comparator;
 /**
  * Created by Robbert van Waardhuizen on 1-10-2015.
  * Student number: 10543147
+ * My player object, can add more variables easily since entire object is stored with gson
  */
+
 public class Player implements Serializable {
     private String name;
     private int score;
@@ -38,11 +40,6 @@ public class Player implements Serializable {
 
     
     // for sorting
-    public static Comparator<Player> COMPARE_BY_NAME = new Comparator<Player>() {
-        public int compare(Player one, Player other) {
-            return one.name.compareTo(other.name);
-        }
-    };
 
     public static Comparator<Player> COMPARE_BY_SCORE = new Comparator<Player>() {
         public int compare(Player one, Player other) {

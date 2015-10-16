@@ -1,4 +1,4 @@
-package nl.mprog.ghost.spookywords;
+package nl.mprog.ghost;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

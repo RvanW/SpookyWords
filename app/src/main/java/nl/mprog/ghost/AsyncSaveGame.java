@@ -7,6 +7,7 @@ import android.util.Log;
 /**
  * Created by Robbert van Waardhuizen on 10-10-2015.
  * Student number: 10543147
+ * Saving game on every turn, doing this async will help smooth gameplay
  */
 class AsyncSaveGame extends AsyncTask<Object, Integer, String>
 {

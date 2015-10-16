@@ -24,9 +24,10 @@ public class HighscoresActivity extends AppCompatActivity implements AdapterView
         setTitle(getResources().getString(R.string.title_activity_highscores));
         myDB = new DBHelper(this);
         playerList = myDB.getAllPlayers();
-
+        // sort by score
         Collections.sort(playerList, Player.COMPARE_BY_SCORE);
 
+        // setup listView's itemclicklistener and adapter
         highscoreListViewAdapter = new HighscoreListViewAdapter(this, playerList);
         listView = (ListView) findViewById(R.id.listView);
         listView.setAdapter(highscoreListViewAdapter);
@@ -57,6 +58,6 @@ public class HighscoresActivity extends AppCompatActivity implements AdapterView
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        // nothing yet
+        // nothing yet, wanted to implement more player detail but out of time
     }
 }

@@ -51,7 +51,7 @@ class Lexicon implements Serializable {
         }
     }
     public void filter(String filterValue) {
-        // I refactored this to add words to the filtered list initially, instead of removing words from the big base lexicon
+        // This filter function adds words to the filtered list initially, instead of removing a lot of words from the big baseLexicon
         if (filterLexicon == null) {
             filterLexicon = new HashSet<>();
             for (String word : baseLexicon) {
@@ -60,7 +60,7 @@ class Lexicon implements Serializable {
                 }
             }
         }
-
+        // If the filtered lexicon does exist, iterate over it..
         else {
             Iterator setIterator = filterLexicon.iterator();
             while (setIterator.hasNext()) {

@@ -52,6 +52,7 @@ public class RecentGamesListViewAdapter extends ArrayAdapter<Game> {
         } else {
             holder = (RecordHolder) row.getTag();
         }
+        // get Game object and set all the views
         Game item = data.get(position);
         SimpleDateFormat outputFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm", Locale.getDefault());
         holder.date.setText(outputFormat.format(item.date));

@@ -26,7 +26,7 @@ class PlayersAdapter extends ArrayAdapter<Player> {
     public PlayersAdapter(Context context, int layoutResourceId, ArrayList<Player> players) {
         super(context, R.layout.item_player, R.id.tvName, players);
         this.textViewId = R.id.tvName;
-        this.layoutResourceId = R.layout.item_player;
+        this.layoutResourceId = layoutResourceId;
         this.context = context;
         this.players = players;
 
@@ -34,28 +34,15 @@ class PlayersAdapter extends ArrayAdapter<Player> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        if(!isEnabled(position)) {
-            TextView text1 = (TextView) convertView.findViewById(textViewId);
-            text1.setText("Select player 2's name..");
-            return getCustomView(position,convertView,parent, true);
-        }
-        return getCustomView(position,convertView,parent, isEnabled(position));
+        return getCustomView(position,convertView,parent);
     }
     @TargetApi(Build.VERSION_CODES.KITKAT)
     @Override
     public View getDropDownView(int position, View convertView, ViewGroup parent) {
-        // split down player string to just the name (minus score)
-
-        return getCustomView(position,convertView,parent, isEnabled(position));
+        return getCustomView(position,convertView,parent);
     }
 
-    @Override
-    public boolean isEnabled(int position) {
-        //TODO disable opponent's name
-        return true;
-    }
-
-    private View getCustomView(int position, View convertView, ViewGroup parent, boolean enabled) {
+    private View getCustomView(int position, View convertView, ViewGroup parent) {
         // Check if an existing view is being reused, otherwise inflate the view
         View row = convertView;
         if (row == null) {
@@ -64,16 +51,10 @@ class PlayersAdapter extends ArrayAdapter<Player> {
         }
         TextView text1 = (TextView) row.findViewById(textViewId);
         ImageView ivAvatar = (ImageView) row.findViewById(R.id.ivAvatar);
-        //
-        if (!enabled) { // if element in the list is disabled.. don't display it
-            text1.setVisibility(View.GONE);
-            ivAvatar.setVisibility(View.GONE);
-        }
-        else if(players.get(position) != null) {
+        // create the display
+        if(players.get(position) != null) {
             Player player = players.get(position);
-            text1.setVisibility(View.VISIBLE);
             text1.setText(player.getName());
-            ivAvatar.setVisibility(View.VISIBLE);
             ivAvatar.setImageResource(player.avatarId);
         }
         // Return the completed view to render on screen

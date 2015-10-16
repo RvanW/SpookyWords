@@ -3,6 +3,7 @@ package nl.mprog.ghost;
 /**
  * Created by Robbert van Waardhuizen on 6-10-2015.
  * Student number: 10543147
+ * ListView adapter, taking in ArrayList<Player>
  */
 
 import android.app.Activity;

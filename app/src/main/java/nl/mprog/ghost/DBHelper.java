@@ -19,7 +19,10 @@ import java.util.Date;
 /**
  * Created by Robbert van Waardhuizen on 8-10-2015.
  * Student number: 10543147
+ * this class manages everything in the database
+ * Storing Player objects with gson, and rebuilding Games with essential variables from this database
  */
+
 class DBHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "MyDBName.db";
     // Table players

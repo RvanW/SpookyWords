@@ -11,6 +11,7 @@ import java.util.Collections;
 /**
  * Created by Robbert van Waardhuizen on 10-10-2015.
  * Student number: 10543147
+ * This will get the most recent games on a different thread so it will not block UI thread (and stutter)
  */
 class AsyncGetGames extends AsyncTask<Void, Integer, ArrayList<Game>>
 {

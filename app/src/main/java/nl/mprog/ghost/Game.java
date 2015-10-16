@@ -26,7 +26,6 @@ public class Game implements Serializable {
     Game(Lexicon lexicon) {
         this.lexicon = lexicon;
         if(this.id == null) this.id = UUIDGenerator.nextUUID();
-        Log.v("GAME ", "NEW ID CREATED!");
     }
 
     // constructor for replicating saved game state
@@ -47,7 +46,6 @@ public class Game implements Serializable {
         message = null;
     }
 
-
     public void guess(String letter) {
 
         guessedLetters += letter;
@@ -66,6 +64,7 @@ public class Game implements Serializable {
     public boolean turn(){
         return turn;
     }
+
     public boolean ended() {
         if(lexicon != null) {
             if (lexicon.lastWord != null && lexicon.lastWord.equals(guessedLetters.replaceAll("\\<.*?>", ""))) { // Player spelled the full word..
@@ -81,6 +80,7 @@ public class Game implements Serializable {
         return false;
     }
 
+    // build up the variables for the message to be displayed (couldn't get to string resources here, so full string is build up in gameActivity)
     private String setMessage(boolean isAWord, String guessedLetters, String winnerName) {
         String fullMessage = "";
         fullMessage += (isAWord ? "is_a_word" : "is_no_word") + "||";
