@@ -10,11 +10,12 @@ A turn-based wordgame for Android where the goal is NOT to spell a word. <br />
 *	Make player profiles, and pick an avatar!
 *	Highscores<br/>
 <br/>
+
 ## Installation
 *	Download and unpack this repository in any directory
 * In Android Studio: File > Open >  browse to directory..
 *	When loading is finished, run the app by pressing play (shift+f10)
-*	Enjoy!
+*	Enjoy!<br/>
 <br/>
 <img width="250px" src="http://i.imgur.com/VMifcgd.png">
 <img width="250px" src="http://i.imgur.com/0l4FZq9.png">
