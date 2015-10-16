@@ -17,3 +17,10 @@ Features:
 <img width="250px" src="http://i.imgur.com/jlmNxYg.png">
 <img width="250px" src="http://i.imgur.com/BxZcfri.png">
 <img width="250px" src="http://i.imgur.com/xgAaGej.png">
+<br />
+UML: <br />
+https://drive.google.com/file/d/0B6021BVqntpaMUxQanRxM2RYM2s/view
+<br />
+<br />
+Sketches: <br />
+https://drive.google.com/folderview?id=0B6021BVqntpaNVg3X0pXRTVPSVE&usp=sharing
